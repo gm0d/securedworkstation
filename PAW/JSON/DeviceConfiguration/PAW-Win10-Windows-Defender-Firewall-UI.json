@@ -3,7 +3,7 @@
     "id": "8de02515-78a7-4f98-9e0e-b5476228d2a3",
     "lastModifiedDateTime": "2020-09-29T08:17:15.9268195Z",
     "roleScopeTagIds": [
-        "0"
+        "Privileged-Identity"
     ],
     "supportsScopeTags": true,
     "deviceManagementApplicabilityRuleOsEdition": null,

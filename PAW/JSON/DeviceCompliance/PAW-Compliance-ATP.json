@@ -1,7 +1,7 @@
 {
     "@odata.type": "#microsoft.graph.windows10CompliancePolicy",
     "roleScopeTagIds": [
-        "0"
+        "Privileged-Identity"
     ],
     "id": "a8994b69-5205-4614-ae3e-150c2d4f2c5d",
     "createdDateTime": "2020-11-30T15:27:50.8972649Z",
@@ -50,7 +50,7 @@
                 "@odata.type": "#microsoft.graph.exclusionGroupAssignmentTarget",
                 "deviceAndAppManagementAssignmentFilterId": null,
                 "deviceAndAppManagementAssignmentFilterType": "none",
-                "groupId": "Emergency Breakglass"
+                "groupId": "AAD-PrivAccounts"
             }
         },
         {
@@ -61,7 +61,7 @@
                 "@odata.type": "#microsoft.graph.groupAssignmentTarget",
                 "deviceAndAppManagementAssignmentFilterId": null,
                 "deviceAndAppManagementAssignmentFilterType": "none",
-                "groupId": "Privileged Workstation Users"
+                "groupId": "Secure Workstations SelfDeploying"
             }
         }
     ],

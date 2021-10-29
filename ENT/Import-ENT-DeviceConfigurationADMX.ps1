@@ -1,13 +1,10 @@
 <#
-
 .COPYRIGHT
 Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
 See LICENSE in the project root for license information.
-
 #>
 
 param (
-
     #Change Conditional Access State, default is disabled
     #Options: enabled, disabled, enabledForReportingButNotEnforced
     [String]$AADGroup = "Privileged Workstations"

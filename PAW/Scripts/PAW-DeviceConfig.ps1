@@ -1,11 +1,8 @@
 ﻿<#
-
 .COPYRIGHT
 Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
 See LICENSE in the project root for license information.
-
 #>
-
 
 $script:ScriptName = $myInvocation.MyCommand.Name
 $script:ScriptName = $scriptName.Substring(0, $scriptName.Length - 4)
@@ -70,16 +67,16 @@ Function Write-Log {
 
 Function Is-VM {
     <#
-.SYNOPSIS
-This function checks WMI to determine if the device is a VM
-.DESCRIPTION
-This function checks WMI to determine if the device is a VM
-.EXAMPLE
-Is-VM
-This function checks WMI to determine if the device is a VM
-.NOTES
-NAME: Is-VM
-#>
+    .SYNOPSIS
+    This function checks WMI to determine if the device is a VM
+    .DESCRIPTION
+    This function checks WMI to determine if the device is a VM
+    .EXAMPLE
+    Is-VM
+    This function checks WMI to determine if the device is a VM
+    .NOTES
+    NAME: Is-VM
+    #>
 
     [CmdletBinding()]
     Param ()
@@ -231,8 +228,7 @@ Finally {
 #endregion Configure AppLocker DLL rule registry key
         
 #region Configure additional Defender for Endpoint security recommendations that cannot be set in Configuration Profiles
-#Handle registry changes
-        
+#Handle registry changes        
         
 Write-Log -Message "Configuring additional Defender for Endpoint security recommendations that cannot be set in Configuration Profiles"
 # Require users to elevate when setting a network's location - prevent changing from Public to Private firewall profile

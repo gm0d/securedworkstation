@@ -1,7 +1,7 @@
 {
     "@odata.type": "#microsoft.graph.windows10CompliancePolicy",
     "roleScopeTagIds": [
-        "0"
+        "Privileged-Identity"
     ],
     "id": "070e9f28-9bf1-41cc-b5bb-77229343d3b9",
     "createdDateTime": "2020-11-30T15:27:52.1330905Z",
