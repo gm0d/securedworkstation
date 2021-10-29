@@ -12,5 +12,8 @@
     "fileName": "PAW-DeviceConfig.ps1",
     "roleScopeTagIds": [
         "Privileged-Identity"
+    ],
+    "assignments": [
+        "Secure-Workstations"
     ]
 }

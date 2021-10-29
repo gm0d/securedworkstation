@@ -1,0 +1,23 @@
+{
+    "settings": {
+        "displayName": "Secure Workstation SelfDeploying",
+        "description": "Profile for Self Deploying to AAD",
+        "mode": "SelfDeployingAAD",
+        "ConvertDeviceToAutopilot": true,
+        "OOBE_language": "os-default",
+        "OOBE_skipKeyboard": true,
+        "OOBE_NameTemplate": "SAW-%SERIAL%",
+        "OOBE_EnableWhiteGlove": false,
+        "OOBE_UserTypeAdmin": false,
+        "OOBE_HideEULA": true,
+        "OOBE_hidePrivacySettings": true,
+        "OOBE_HideChangeAccountOpts": true,
+        "OOBE_SkipConnectivityCheck": true
+    },
+    "roleScopeTagIds": [
+        "Privileged-Identity"
+    ],
+    "assignments": [
+        "Secure-Workstations-SelfDeploying"
+    ]
+}

@@ -1,0 +1,44 @@
+{
+    "Groups": [
+        {
+            "displayName": "SAW-Devices-SelfDeploying",
+            "description": "Dynamic Group for Autopilot for SelfDeploying SAW Devices",
+            "groupTypes": [
+                "DynamicMembership"
+            ],
+            "mailEnabled": false,
+            "mailNickName": "group",
+            "securityEnabled": true,
+            "membershipRuleProcessingState": "on",
+            "membershipRule": "(device.devicePhysicalIds -any (_ -eq \"[OrderID]:SAW-SelfDeploying\"))"
+        },
+        {
+            "displayName": "SAW-Devices-UserDriven",
+            "description": "Dynamic Group for Autopilot User driven deployment for  SAW Devices",
+            "groupTypes": [
+                "DynamicMembership"
+            ],
+            "mailEnabled": false,
+            "mailNickName": "group",
+            "securityEnabled": true,
+            "membershipRuleProcessingState": "On",
+            "membershipRule": "(device.devicePhysicalIds -any (_ -eq \"[OrderID]:SAW-UserDriven\"))"
+        },
+        {
+            "displayName": "SAW-Admins",
+            "description": "Users with local admin privileges in SAW",
+            "mailEnabled": false,
+            "mailNickname": "group",
+            "securityEnabled": true,
+            "isAssignableToRole": true            
+        },        
+        {
+            "DisplayName": "SAW-Users",
+            "Description": "Users allowed to join devices to Azure AD",
+            "MailEnabled": false,
+            "MailNickname": "group",
+            "SecurityEnabled": true
+        }
+    ],
+    "Users": {}
+}

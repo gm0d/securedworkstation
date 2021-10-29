@@ -55,20 +55,20 @@ Write-Host "Adding Device Compliance Policies"
 Start-Sleep -s 5
 
 Write-Host "Adding ADMX Device settings"
-. $ScriptDir/Import-DeviceConfigurationADMX.ps1 -ImportPath "$ConfigPath\JSON\DeviceConfigurationADMX" -AADGroup 'Secure Workstations'
+. $ScriptDir/Import-DeviceConfigurationADMX.ps1 -ImportPath "$ConfigPath\JSON\DeviceConfigurationADMX" -AADGroup 'Secure-Workstations'
 Start-Sleep -s 5
 
 Write-Host "Adding PS1 Config scripts"
-. $ScriptDir/Import-DeviceConfigScript.ps1 -ImportPath "$ConfigPath\JSON\DeviceManagementScripts"  -AADGroup 'Secure Workstations'
+. $ScriptDir/Import-DeviceConfigScript.ps1 -ImportPath "$ConfigPath\JSON\DeviceManagementScripts"
 Start-Sleep -s 5
 
 #write-host "Adding Enrollment Status Page"
 #. $ScriptDir/ESP_Import.ps1
 #Start-Sleep -s 5
 
-#write-host "Adding AutoPilot Profile"
-#. $ScriptDir/AutoPilot_Import.ps1
-#Start-Sleep -s 5
+write-host "Adding AutoPilot Profile"
+. $ScriptDir/Import-AutopilotProfiles.ps1 -ImportPath "$ConfigPath\JSON\Autopilot"
+Start-Sleep -s 5
 
 #write-host "Adding Device Enrollment Restrictions"
 #. $ScriptDir/DER-Import_PAW.ps1

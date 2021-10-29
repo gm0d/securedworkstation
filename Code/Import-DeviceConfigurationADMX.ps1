@@ -16,14 +16,17 @@ param (
         })]
     [System.IO.FileInfo]$ImportPath,
 
-	[String]$AADGroup = "Privileged Workstations"    
+	[Parameter(Mandatory = $true)]
+    [ValidateScript( {
+        if (-Not (Get-AADGroup "displayName eq '$_'") ) {
+            throw "Group does not exist in AD"
+        }    
+        return $true
+        })]
+    [String]$AADGroup	
 )
 
-$TargetGroupId = (Get-AADGroup | Where-Object { $_.displayName -eq $AADGroup }).id
-if ($null -eq $TargetGroupId -or $TargetGroupId -eq "") {
-	Write-Error "AAD Group - [$AADGroup] doesn't exist, please specify a valid AAD Group..."
-	exit
-}
+$TargetGroupId = Get-AADGroup -Filter "displayName eq '$AADGroup'"
 
 Get-ChildItem $ImportPath -filter *.json |  
 ForEach-Object {	

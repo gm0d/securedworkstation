@@ -55,7 +55,7 @@ Get-ChildItem $ImportPath -filter *.json |
                     Write-Verbose "AAD Group Name: $($PSItem.target.groupId )"
                     Write-Verbose "Assignment Type: $($PSItem.target."@OData.type")"
 
-                    $TargetGroupId = (Get-AADGroup -GroupName $PSItem.target.groupId).id   
+                    $TargetGroupId = (Get-AADGroup -Filter "displayName eq '$($PSItem.target.groupId)'").id                        
                     if ($TargetGroupID){
                         Write-Verbose "Included Group ID: $TargetGroupID"
                         @{

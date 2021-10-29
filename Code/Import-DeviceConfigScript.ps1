@@ -15,19 +15,8 @@ param (
         }
         return $true
         })]
-    [System.IO.FileInfo]$ImportPath,
-
-    [Parameter(Mandatory = $true)]
-    [ValidateScript( {
-        if (-Not (Get-AADGroup -GroupName $_) ) {
-            throw "Group does not exist in AD"
-        }    
-        return $true
-        })]
-    [String]$AADGroup
+    [System.IO.FileInfo]$ImportPath
 )
-
-$TargetGroupId = (Get-AADGroup -GroupName $AADGroup).id
 
 Get-ChildItem $ImportPath -filter *.json |
     Foreach-object {
@@ -57,8 +46,14 @@ Get-ChildItem $ImportPath -filter *.json |
             $Create_Local_Script = Add-DeviceManagementScript -JSON $JSON_Output
 
             Write-Verbose "Assigning Device Management Script to AAD Group '$AADGroup'"
-            $Assign_Local_Script = Add-DeviceManagementScriptAssignment -ScriptId $Create_Local_Script.id -TargetGroupId $TargetGroupId
-            Write-Verbose "Assigned '$AADGroup' to $($Create_Local_Script.displayName)/$($Create_Local_Script.id)"        
+            $JSON_Convert.assignments | 
+                ForEach-Object {
+                    $TargetGroupId = (Get-AADGroup -Filter "displayName eq '$PSItem'").id
+                    if ($TargetGroupID){
+                        $Assign_Local_Script = Add-DeviceManagementScriptAssignment -ScriptId $Create_Local_Script.id -TargetGroupId $TargetGroupId
+                        Write-Verbose "Assigned '$AADGroup' to $($Create_Local_Script.displayName)/$($Create_Local_Script.id)"
+                }
+            }
         }        
         else {
             Write-Warning "Device Management Script: $($JSON_Convert.displayName) has already been created"

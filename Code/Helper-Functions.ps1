@@ -1,3 +1,19 @@
+Function Convert-ObjectToHashTable{
+    [CmdletBinding()]
+    param
+    (
+        [parameter(Mandatory=$true,ValueFromPipeline=$true)]
+        [pscustomobject] $Object
+    )
+    $HashTable = @{}
+    $ObjectMembers = Get-Member -InputObject $Object -MemberType *Property
+    foreach ($Member in $ObjectMembers) 
+    {
+        $HashTable.$($Member.Name) = $Object.$($Member.Name)
+    }
+    return $HashTable
+}
+
 function Get-AuthToken {		
     <#
     .SYNOPSIS
@@ -29,7 +45,8 @@ function Get-AuthToken {
     [System.Reflection.Assembly]::LoadFrom($adal) | Out-Null		
     [System.Reflection.Assembly]::LoadFrom($adalforms) | Out-Null		
     
-    $clientId = "d1ddf0e4-d672-4dae-b554-9d5bdfd93547"
+    $clientId = "1b730954-1685-4b74-9bfd-dac224a7b894"
+    # $clientId = "d1ddf0e4-d672-4dae-b554-9d5bdfd93547"
     $redirectUri = "urn:ietf:wg:oauth:2.0:oob"
     $resourceAppIdURI = "https://graph.microsoft.com"
     $authority = "https://login.microsoftonline.com/$Tenant"		
@@ -109,7 +126,7 @@ Function Add-IntuneScopeTag {
         $reader = New-Object System.IO.StreamReader($errorResponse)
         $reader.BaseStream.Position = 0
         $reader.DiscardBufferedData()
-        $responseBody = $reader.ReadToEnd();
+        $responseBody = $reader.ReadToEnd()
         Write-Host "Response content:`n$responseBody" -f Red
         Write-Error "Request to $Uri failed with HTTP Status $($ex.Response.StatusCode) $($ex.Response.StatusDescription)"
         Write-Host
@@ -159,7 +176,7 @@ Function Get-IntuneScopeTag {
         $reader = New-Object System.IO.StreamReader($errorResponse)
         $reader.BaseStream.Position = 0
         $reader.DiscardBufferedData()
-        $responseBody = $reader.ReadToEnd();
+        $responseBody = $reader.ReadToEnd()
         Write-Host "Response content:`n$responseBody" -f Red
         Write-Error "Request to $Uri failed with HTTP Status $($ex.Response.StatusCode) $($ex.Response.StatusDescription)"
         Write-Host
@@ -207,7 +224,7 @@ Function Add-DeviceConfigurationPolicy {
         $reader = New-Object System.IO.StreamReader($errorResponse)
         $reader.BaseStream.Position = 0
         $reader.DiscardBufferedData()
-        $responseBody = $reader.ReadToEnd();
+        $responseBody = $reader.ReadToEnd()
         Write-Host "Response content:`n$responseBody" -f Red
         Write-Error "Request to $Uri failed with HTTP Status $($ex.Response.StatusCode) $($ex.Response.StatusDescription)"
         Write-Host
@@ -253,7 +270,7 @@ Function Add-DeviceConfigurationPolicyAssignment {
         $reader = New-Object System.IO.StreamReader($errorResponse)
         $reader.BaseStream.Position = 0
         $reader.DiscardBufferedData()
-        $responseBody = $reader.ReadToEnd();
+        $responseBody = $reader.ReadToEnd()
         Write-Host "Response content:`n$responseBody" -f Red
         Write-Error "Request to $Uri failed with HTTP Status $($ex.Response.StatusCode) $($ex.Response.StatusDescription)"
         Write-Host
@@ -298,7 +315,7 @@ Function Get-DeviceConfigurationPolicy {
         $reader = New-Object System.IO.StreamReader($errorResponse)
         $reader.BaseStream.Position = 0
         $reader.DiscardBufferedData()
-        $responseBody = $reader.ReadToEnd();
+        $responseBody = $reader.ReadToEnd()
         Write-Host "Response content:`n$responseBody" -f Red
         Write-Error "Request to $Uri failed with HTTP Status $($ex.Response.StatusCode) $($ex.Response.StatusDescription)"
         Write-Host
@@ -306,83 +323,6 @@ Function Get-DeviceConfigurationPolicy {
     }
 }
 
-Function Get-AADGroup {
-    <#
-    .SYNOPSIS
-    This function is used to get AAD Groups from the Graph API REST interface
-    .DESCRIPTION
-    The function connects to the Graph API Interface and gets any Groups registered with AAD
-    .EXAMPLE
-    Get-AADGroup
-    Returns all users registered with Azure AD
-    .NOTES
-    NAME: Get-AADGroup
-    #>
-    [cmdletbinding()]
-    param(
-        $GroupName,
-        $id,
-        [switch]$Members,
-
-        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true)]
-        [hashtable]$AuthToken
-    )
-    # Defining Variables
-    $graphApiVersion = "v1.0"
-    $Group_resource = "groups"
-    # pseudo-group identifiers for all users and all devices
-    [string]$AllUsers = "acacacac-9df4-4c7d-9d50-4ef0226f57a9"
-    [string]$AllDevices = "adadadad-808e-44e2-905a-0b7873a8a531"
-    try {
-        if ($id) {
-            $uri = "https://graph.microsoft.com/$graphApiVersion/$($Group_resource)?`$filter=id eq '$id'"
-            switch ( $id ) {
-                $AllUsers {
-                    $grp = [PSCustomObject]@{ displayName = "All users" }; $grp           
-                }
-                $AllDevices {
-                    $grp = [PSCustomObject]@{ displayName = "All devices" }; $grp         
-                }
-                default {
-                    (Invoke-RestMethod -Uri $uri -Headers $AuthToken -Method Get).Value  
-                }
-            }                
-        }
-        elseif ($GroupName -eq "" -or $GroupName -eq $null) {
-            $uri = "https://graph.microsoft.com/$graphApiVersion/$($Group_resource)"
-            (Invoke-RestMethod -Uri $uri -Headers $AuthToken -Method Get).Value
-        }
-        else {
-            if (!$Members) {
-                $uri = "https://graph.microsoft.com/$graphApiVersion/$($Group_resource)?`$filter=displayname eq '$GroupName'"
-                (Invoke-RestMethod -Uri $uri -Headers $AuthToken -Method Get).Value
-            }
-            elseif ($Members) {
-                $uri = "https://graph.microsoft.com/$graphApiVersion/$($Group_resource)?`$filter=displayname eq '$GroupName'"
-                $Group = (Invoke-RestMethod -Uri $uri -Headers $AuthToken -Method Get).Value
-                if ($Group) {
-                    $GID = $Group.id
-                    $Group.displayName
-                    Write-Host
-                    $uri = "https://graph.microsoft.com/$graphApiVersion/$($Group_resource)/$GID/Members"
-                    (Invoke-RestMethod -Uri $uri -Headers $AuthToken -Method Get).Value
-                }
-            }
-        }
-    }
-    catch {
-        $ex = $_.Exception
-        $errorResponse = $ex.Response.GetResponseStream()
-        $reader = New-Object System.IO.StreamReader($errorResponse)
-        $reader.BaseStream.Position = 0
-        $reader.DiscardBufferedData()
-        $responseBody = $reader.ReadToEnd();
-        Write-Host "Response content:`n$responseBody" -f Red
-        Write-Error "Request to $Uri failed with HTTP Status $($ex.Response.StatusCode) $($ex.Response.StatusDescription)"
-        Write-Host
-        break
-    }
-}
 
 Function Test-JSON {
     <#
@@ -452,7 +392,7 @@ Function Add-DeviceCompliancePolicy {
         $reader = New-Object System.IO.StreamReader($errorResponse)
         $reader.BaseStream.Position = 0
         $reader.DiscardBufferedData()
-        $responseBody = $reader.ReadToEnd();
+        $responseBody = $reader.ReadToEnd()
         Write-Host "Response content:`n$responseBody" -f Red
         Write-Error "Request to $Uri failed with HTTP Status $($ex.Response.StatusCode) $($ex.Response.StatusDescription)"
         Write-Host
@@ -496,7 +436,7 @@ Function Get-DeviceCompliancePolicy {
         $reader = New-Object System.IO.StreamReader($errorResponse)
         $reader.BaseStream.Position = 0
         $reader.DiscardBufferedData()
-        $responseBody = $reader.ReadToEnd();
+        $responseBody = $reader.ReadToEnd()
         Write-Host "Response content:`n$responseBody" -f Red
         Write-Error "Request to $Uri failed with HTTP Status $($ex.Response.StatusCode) $($ex.Response.StatusDescription)"
         Write-Host
@@ -589,7 +529,7 @@ Function Create-GroupPolicyConfigurations {
         $reader = New-Object System.IO.StreamReader($errorResponse)
         $reader.BaseStream.Position = 0
         $reader.DiscardBufferedData()
-        $responseBody = $reader.ReadToEnd();
+        $responseBody = $reader.ReadToEnd()
         Write-Host "Response content:`n$responseBody" -f Red
         Write-Error "Request to $Uri failed with HTTP Status $($ex.Response.StatusCode) $($ex.Response.StatusDescription)"
         Write-Host
@@ -638,7 +578,7 @@ Function Create-GroupPolicyConfigurationsDefinitionValues {
         $reader = New-Object System.IO.StreamReader($errorResponse)
         $reader.BaseStream.Position = 0
         $reader.DiscardBufferedData()
-        $responseBody = $reader.ReadToEnd();
+        $responseBody = $reader.ReadToEnd()
         Write-Error "Response content:`n$responseBody"
         Write-Error "Request to $Uri failed with HTTP Status $($ex.Response.StatusCode) $($ex.Response.StatusDescription)"
         Write-Error
@@ -678,7 +618,7 @@ Function Get-GroupPolicyConfigurations {
         $reader = New-Object System.IO.StreamReader($errorResponse)
         $reader.BaseStream.Position = 0
         $reader.DiscardBufferedData()
-        $responseBody = $reader.ReadToEnd();
+        $responseBody = $reader.ReadToEnd()
         Write-Host "Response content:`n$responseBody" -f Red
         Write-Error "Request to $Uri failed with HTTP Status $($ex.Response.StatusCode) $($ex.Response.StatusDescription)"
         Write-Host
@@ -740,7 +680,7 @@ Function Add-GroupPolicyConfigurationPolicyAssignment {
         $reader = New-Object System.IO.StreamReader($errorResponse)
         $reader.BaseStream.Position = 0
         $reader.DiscardBufferedData()
-        $responseBody = $reader.ReadToEnd();
+        $responseBody = $reader.ReadToEnd()
         Write-Host "Response content:`n$responseBody" -f Red
         Write-Error "Request to $Uri failed with HTTP Status $($ex.Response.StatusCode) $($ex.Response.StatusDescription)"        
         break
@@ -788,7 +728,7 @@ Function Get-DeviceManagementScript {
         $reader = New-Object System.IO.StreamReader($errorResponse)
         $reader.BaseStream.Position = 0
         $reader.DiscardBufferedData()
-        $responseBody = $reader.ReadToEnd();
+        $responseBody = $reader.ReadToEnd()
         Write-Host "Response content:`n$responseBody" -f Red
         Write-Error "Request to $Uri failed with HTTP Status $($ex.Response.StatusCode) $($ex.Response.StatusDescription)"
         Write-Host
@@ -840,7 +780,7 @@ Function Add-DeviceManagementScript {
         $reader = New-Object System.IO.StreamReader($errorResponse)
         $reader.BaseStream.Position = 0
         $reader.DiscardBufferedData()
-        $responseBody = $reader.ReadToEnd();
+        $responseBody = $reader.ReadToEnd()
         Write-Error "Response content:`n$responseBody"
         Write-Error "Request to $Uri failed with HTTP Status $($ex.Response.StatusCode) $($ex.Response.StatusDescription)"        
         break
@@ -902,7 +842,7 @@ Function Add-DeviceManagementScriptAssignment {
         $reader = New-Object System.IO.StreamReader($errorResponse)
         $reader.BaseStream.Position = 0
         $reader.DiscardBufferedData()
-        $responseBody = $reader.ReadToEnd();
+        $responseBody = $reader.ReadToEnd()
         Write-Error "Response content:`n$responseBody"
         Write-Error "Request to $Uri failed with HTTP Status $($ex.Response.StatusCode) $($ex.Response.StatusDescription)"        
         break
