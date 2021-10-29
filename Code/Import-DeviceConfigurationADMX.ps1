@@ -4,26 +4,24 @@ Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT
 See LICENSE in the project root for license information.
 #>
 param (
-	#Change Conditional Access State, default is disabled
-	#Options: enabled, disabled, enabledForReportingButNotEnforced
+	[Parameter(Mandatory = $true)]
+    [ValidateScript( {
+        if (-Not ($_ | Test-Path) ) {
+            throw "Folder does not exist"
+        }
+        if (-Not ($_ | Test-Path -PathType Container) ) {
+            throw "The Path argument must be a Folder."
+        }
+        return $true
+        })]
+    [System.IO.FileInfo]$ImportPath,
+
 	[String]$AADGroup = "Privileged Workstations"    
 )
 
-#$AADGroup = "PAW-Global-Devices"
-$ScriptDir = Split-Path $script:MyInvocation.MyCommand.Path
-$ImportPath = $ScriptDir + "\JSON\DeviceConfigurationADMX"
-
-if (!(Test-Path $ImportPath)) {
-	Write-Error "Import Path for JSON file doesn't exist..." -ForegroundColor Red
-	Write-Error "Script can't continue..." -ForegroundColor Red
-	Write-Error
-	break		
-}
-
 $TargetGroupId = (Get-AADGroup | Where-Object { $_.displayName -eq $AADGroup }).id
 if ($null -eq $TargetGroupId -or $TargetGroupId -eq "") {
-	Write-Error "AAD Group - [$AADGroup] doesn't exist, please specify a valid AAD Group..." -ForegroundColor Red
-	Write-Error
+	Write-Error "AAD Group - [$AADGroup] doesn't exist, please specify a valid AAD Group..."
 	exit
 }
 
@@ -40,7 +38,7 @@ ForEach-Object {
 			Write-Verbose $JSON_Output
 			Create-GroupPolicyConfigurationsDefinitionValues -JSON $JSON_Output -GroupPolicyConfigurationID $GroupPolicyConfigurationID 
 		}		
-		Write-Verbose "Policy: $Policy_Name created"
+		Write-Host "Policy: $Policy_Name created" -ForegroundColor Green
 
 		$DeviceConfigs = Get-GroupPolicyConfigurations -name $Policy_Name
 		$DeviceConfigID = $DeviceConfigs.id	

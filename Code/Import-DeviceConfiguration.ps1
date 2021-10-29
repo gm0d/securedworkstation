@@ -3,16 +3,19 @@
 Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
 See LICENSE in the project root for license information.
 #>
-
-$ScriptDir = Split-Path $script:MyInvocation.MyCommand.Path
-$ImportPath = $ScriptDir + "\JSON\DeviceConfiguration"
-
-if (!(Test-Path $ImportPath)) {
-    Write-Error "Import Path for JSON file doesn't exist..."
-    Write-Error "Script can't continue..."
-    Write-Error
-    break
-}
+param (	
+	[Parameter(Mandatory = $true)]
+    [ValidateScript( {
+        if (-Not ($_ | Test-Path) ) {
+            throw "Folder does not exist"
+        }
+        if (-Not ($_ | Test-Path -PathType Container) ) {
+            throw "The Path argument must be a Folder."
+        }
+        return $true
+        })]
+    [System.IO.FileInfo]$ImportPath    
+)
 
 Get-ChildItem $ImportPath -filter *.json |
     Foreach-object {
@@ -49,24 +52,24 @@ Get-ChildItem $ImportPath -filter *.json |
             
             #region Replace group assignments with actual values
             $ConfigurationAssignments = @($JSON_Convert.assignments | 
-            ForEach-Object {
-                Write-Verbose "AAD Group Name:" $PSItem.target.groupId
-                Write-Verbose "Assignment Type:" $PSItem.target."@OData.type"
+                ForEach-Object {
+                    Write-Verbose "AAD Group Name: $($PSItem.target.groupId)"
+                    Write-Verbose "Assignment Type: $($PSItem.target."@OData.type")"
 
-                $TargetGroupId = (Get-AADGroup -GroupName $PSItem.target.groupId).id 
-                if ($TargetGroupID){
-                    Write-Verbose "Included Group ID:" $TargetGroupID -ForegroundColor Yellow                
-                    @{
-                        target = @{
-                            "@odata.type" = $PSItem.target."@OData.type" 
-                            groupId       = $TargetGroupId
-                        }
-                    }   
-                }
-                else{
-                    Write-Warning "Group [$($PSItem.target.groupId)] not found skipping assignment"
-                }                              
-            })
+                    $TargetGroupId = (Get-AADGroup -GroupName $PSItem.target.groupId).id 
+                    if ($TargetGroupID){
+                        Write-Verbose "Included Group ID:" $TargetGroupID -ForegroundColor Yellow                
+                        @{
+                            target = @{
+                                "@odata.type" = $PSItem.target."@OData.type" 
+                                groupId       = $TargetGroupId
+                            }
+                        }   
+                    }
+                    else{
+                        Write-Warning "Group [$($PSItem.target.groupId)] not found skipping assignment"
+                    }                              
+                })
             if($ConfigurationAssignments){
                 Add-DeviceConfigurationPolicyAssignment -Assignments $ConfigurationAssignments -ConfigurationPolicyId $DeviceConfigID
             }

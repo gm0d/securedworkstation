@@ -96,7 +96,7 @@ Function Add-IntuneScopeTag {
         $Body = @{
             "@odata.type" = "#microsoft.graph.roleScopeTag"
             displayName   = $Name
-            description   = $Descrption
+            description   = $Description
             isBuiltIn     = $false
         } | ConvertTo-Json
         $uri = "https://graph.microsoft.com/$graphApiVersion/$($DCP_resource)"
@@ -198,7 +198,7 @@ Function Add-DeviceConfigurationPolicy {
         else {
             Test-JSON -JSON $JSON
             $uri = "https://graph.microsoft.com/$graphApiVersion/$($DCP_resource)"
-            Invoke-RestMethod -Uri $uri -Headers $AuthToken -Method Post -Body $JSON -ContentType "application/json"
+            Invoke-RestMethod -Uri $uri -Headers $AuthToken -Method Post -Body $JSON -ContentType "application/json" | Out-Null
         }
     }    
     catch {
@@ -285,11 +285,11 @@ Function Get-DeviceConfigurationPolicy {
     try {
         if ($Name) {
             $uri = "https://graph.microsoft.com/$graphApiVersion/$($DCP_resource)"
-        (Invoke-RestMethod -Uri $uri -Headers $AuthToken -Method Get).Value | Where-Object { ($_.'displayName').contains("$Name") }
+            (Invoke-RestMethod -Uri $uri -Headers $AuthToken -Method Get).Value | Where-Object { ($_.'displayName').contains("$Name") }
         }
         else {
             $uri = "https://graph.microsoft.com/$graphApiVersion/$($DCP_resource)"
-        (Invoke-RestMethod -Uri $uri -Headers $AuthToken -Method Get).Value
+            (Invoke-RestMethod -Uri $uri -Headers $AuthToken -Method Get).Value
         }
     }
     catch {
@@ -443,7 +443,7 @@ Function Add-DeviceCompliancePolicy {
         else {    
             Test-JSON -JSON $JSON    
             $uri = "https://graph.microsoft.com/$graphApiVersion/$($Resource)"
-            Invoke-RestMethod -Uri $uri -Headers $AuthToken -Method Post -Body $JSON -ContentType "application/json"
+            Invoke-RestMethod -Uri $uri -Headers $AuthToken -Method Post -Body $JSON -ContentType "application/json" | Out-Null
         }
     }
     catch {
@@ -535,7 +535,7 @@ Function Add-DeviceCompliancePolicyAssignment {
         } | ConvertTo-Json -depth 5
         Write-Output $JSON
         $uri = "https://graph.microsoft.com/$graphApiVersion/$($Resource)"
-        Invoke-RestMethod -Uri $uri -Headers $AuthToken -Method Post -Body $JSON -ContentType "application/json"    
+        Invoke-RestMethod -Uri $uri -Headers $AuthToken -Method Post -Body $JSON -ContentType "application/json" | Out-Null
     }
         
     catch {    
@@ -544,7 +544,7 @@ Function Add-DeviceCompliancePolicyAssignment {
         $reader = New-Object System.IO.StreamReader($errorResponse)
         $reader.BaseStream.Position = 0
         $reader.DiscardBufferedData()
-        $responseBody = $reader.ReadToEnd();
+        $responseBody = $reader.ReadToEnd()
         Write-Host "Response content:`n$responseBody" -f Red
         Write-Error "Request to $Uri failed with HTTP Status $($ex.Response.StatusCode) $($ex.Response.StatusDescription)"
         Write-Host
@@ -629,7 +629,7 @@ Function Create-GroupPolicyConfigurationsDefinitionValues {
         else {				
             Test-JSON -JSON $JSON				
             $uri = "https://graph.microsoft.com/$graphApiVersion/$($DCP_resource)"
-            Invoke-RestMethod -Uri $uri -Headers $AuthToken -Method Post -Body $JSON -ContentType "application/json"
+            Invoke-RestMethod -Uri $uri -Headers $AuthToken -Method Post -Body $JSON -ContentType "application/json" | Out-Null
         }			
     }		
     catch {			
@@ -713,15 +713,15 @@ Function Add-GroupPolicyConfigurationPolicyAssignment {
     
     try {
         if (!$ConfigurationPolicyId) {
-            Write-Host "No Configuration Policy Id specified, specify a valid Configuration Policy Id" -f Red
+            Write-Error "No Configuration Policy Id specified, specify a valid Configuration Policy Id"
             break
         }
         if (!$TargetGroupId) {
-            Write-Host "No Target Group Id specified, specify a valid Target Group Id" -f Red
+            Write-Error "No Target Group Id specified, specify a valid Target Group Id"
             break        
         }
         if (!$Assignment) {
-            Write-Host "No Assignment Type specified, specify a valid Assignment Type" -f Red
+            Write-Error "No Assignment Type specified, specify a valid Assignment Type"
             break
         }
         $JSON = @{
@@ -732,8 +732,56 @@ Function Add-GroupPolicyConfigurationPolicyAssignment {
         } | ConvertTo-Json        
 
         $uri = "https://graph.microsoft.com/$graphApiVersion/$($Resource)"
-        Invoke-RestMethod -Uri $uri -Headers $AuthToken -Method Post -Body $JSON -ContentType "application/json"
+        Invoke-RestMethod -Uri $uri -Headers $AuthToken -Method Post -Body $JSON -ContentType "application/json" | Out-Null
     }    
+    catch {
+        $ex = $_.Exception
+        $errorResponse = $ex.Response.GetResponseStream()
+        $reader = New-Object System.IO.StreamReader($errorResponse)
+        $reader.BaseStream.Position = 0
+        $reader.DiscardBufferedData()
+        $responseBody = $reader.ReadToEnd();
+        Write-Host "Response content:`n$responseBody" -f Red
+        Write-Error "Request to $Uri failed with HTTP Status $($ex.Response.StatusCode) $($ex.Response.StatusDescription)"        
+        break
+    }
+}
+
+Function Get-DeviceManagementScript {
+    <#
+    .SYNOPSIS
+    This function is used to get device management scripts from the Graph API REST interface
+    .DESCRIPTION
+    The function connects to the Graph API Interface and gets any device management scripts
+    .EXAMPLE
+    Get-DeviceManagementScript
+    Returns any device management scripts configured in Intune
+    .NOTES
+    NAME: Get-DeviceManagementScript
+    #>
+    [cmdletbinding()]
+    param(
+        $name,
+
+        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true)]
+        [hashtable]$AuthToken
+    )
+    $graphApiVersion = "Beta"
+    $DCP_resource = "deviceManagement/deviceManagementScripts"
+    try {
+        if ($Name) {
+            $uri = "https://graph.microsoft.com/$graphApiVersion/$($DCP_resource)"
+            $DevMgmtScript = (Invoke-RestMethod -Uri $uri -Headers $AuthToken -Method Get).Value | Where-Object { ($_.'displayName').contains($Name) }
+            if ($DevMgmtScript){
+                $uri = "https://graph.microsoft.com/$graphApiVersion/$($DCP_resource)/$($DevMgmtScript.id)"
+                Invoke-RestMethod -Uri $uri -Headers $AuthToken -Method Get
+            }
+        }
+        else {
+            $uri = "https://graph.microsoft.com/$graphApiVersion/$($DCP_resource)"
+            (Invoke-RestMethod -Uri $uri -Headers $AuthToken -Method Get).Value
+        }
+    }
     catch {
         $ex = $_.Exception
         $errorResponse = $ex.Response.GetResponseStream()
@@ -763,70 +811,29 @@ Function Add-DeviceManagementScript {
     NAME: Add-DeviceManagementScript
     #>
     [cmdletbinding()]
-    Param (
-        # Path or URL to Powershell-script to add to Intune
-        [Parameter(Mandatory = $true)]
-        [string]$File,
-        # PowerShell description in Intune
-        [Parameter(Mandatory = $false)]
-        [string]$Description,
-        # Set to true if it is a URL
-        [Parameter(Mandatory = $false)]
-        [switch][bool]$URL = $false
+    param(
+        $JSON,
+
+        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true)]
+        [hashtable]$AuthToken
     )
-    if ($URL -eq $true) {
-        $FileName = $File -split "/"
-        $FileName = $FileName[-1]
-        $OutFile = "$env:TEMP\$FileName"
-        try {
-            Invoke-WebRequest -Uri $File -UseBasicParsing -OutFile $OutFile
-        }
-        catch {
-            Write-Error "Could not download file from URL: $File"
-            break
-        }
-        $File = $OutFile
-        if (!(Test-Path $File)) {
-            Write-Error "$File could not be located."
-            break
-        }
-    }
-    elseif ($URL -eq $false) {
-        if (!(Test-Path $File)) {
-            Write-Error "$File could not be located."
-            break
-        }
-        $FileName = Get-Item $File | Select-Object -ExpandProperty Name
-    }
-    $B64File = [System.Convert]::ToBase64String([System.IO.File]::ReadAllBytes($File));
-
-    if ($URL -eq $true) {
-        Remove-Item $File -Force
-    }
-
-    $JSON = [ordered]@{
-        "@odata.type" = "#microsoft.graph.deviceManagementScript"
-        displayName = $FileName
-        description = $Description
-        runSchedule = @{
-            "@odata.type" = "microsoft.graph.runSchedule"
-            }
-        scriptContent = $B64File
-        runAsAccount = "system"
-        enforceSignatureCheck = "false"
-        fileName = $FileName
-        runAs32Bit = "true"
-    } | ConvertTo-Json   
+  
+    # $B64File = [System.Convert]::ToBase64String([System.IO.File]::ReadAllBytes($File))
 
     $graphApiVersion = "Beta"
     $DMS_resource = "deviceManagement/deviceManagementScripts"
     Write-Verbose "Resource: $DMS_resource"
 
     try {
-        $uri = "https://graph.microsoft.com/$graphApiVersion/$DMS_resource"
-        Invoke-RestMethod -Uri $uri -Headers $authToken -Method Post -Body $JSON -ContentType "application/json"
-    }
-
+        if ($JSON -eq "" -or $JSON -eq $null) {
+            Write-Host "No JSON specified, please specify valid JSON for the Android Policy..." -f Red
+        }
+        else {
+            Test-JSON -JSON $JSON
+            $uri = "https://graph.microsoft.com/$graphApiVersion/$($DMS_resource)"
+            Invoke-RestMethod -Uri $uri -Headers $AuthToken -Method Post -Body $JSON -ContentType "application/json"
+        }
+    }  
     catch {
         $ex = $_.Exception
         $errorResponse = $ex.Response.GetResponseStream()
@@ -834,7 +841,7 @@ Function Add-DeviceManagementScript {
         $reader.BaseStream.Position = 0
         $reader.DiscardBufferedData()
         $responseBody = $reader.ReadToEnd();
-        Write-Error "Response content:`n$responseBody" -f Red
+        Write-Error "Response content:`n$responseBody"
         Write-Error "Request to $Uri failed with HTTP Status $($ex.Response.StatusCode) $($ex.Response.StatusDescription)"        
         break
     }
@@ -856,7 +863,10 @@ Function Add-DeviceManagementScriptAssignment {
     [cmdletbinding()]
     param(
         $ScriptId,
-        $TargetGroupId
+        $TargetGroupId,
+
+        [Parameter(Mandatory = $true, ValueFromPipelineByPropertyName = $true)]
+        [hashtable]$AuthToken
     )
 
     $graphApiVersion = "Beta"

@@ -50,7 +50,7 @@
                 "@odata.type": "#microsoft.graph.exclusionGroupAssignmentTarget",
                 "deviceAndAppManagementAssignmentFilterId": null,
                 "deviceAndAppManagementAssignmentFilterType": "none",
-                "groupId": "Emergency Breakglass"
+                "groupId": "AAD-PrivAccounts"
             }
         },
         {
@@ -61,7 +61,7 @@
                 "@odata.type": "#microsoft.graph.groupAssignmentTarget",
                 "deviceAndAppManagementAssignmentFilterId": null,
                 "deviceAndAppManagementAssignmentFilterType": "none",
-                "groupId": "Privileged Workstation Users"
+                "groupId": "Secure Workstations SelfDeploying"
             }
         }
     ],

@@ -1,19 +1,27 @@
-#Requires -Modules @{ModuleName="AzureAD"; ModuleVersion="2.0.2" }
+#Requires -Modules @{ModuleName="AzureAD"; ModuleVersion="2.0.2" }, @{ModuleName="WindowsAutopilotIntune"; ModuleVersion="5.0" }
 <#
 .COPYRIGHT
 Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
 See LICENSE in the project root for license information.
 #>
+[cmdletbinding()]
+param(        
+    [ValidateSet("PAW","ENT","SPE")]
+    $Configuration = "PAW"
+)
 
 # Determine script location for PowerShell
 $ScriptDir = Split-Path $script:MyInvocation.MyCommand.Path
+$ConfigPath = Resolve-Path $ScriptDir\..\Settings\$Configuration
 
-write-host "Loading helper functions"
-. $ScriptDir/../Helper-Functions.ps1
+Write-Host "Loading helper functions"
+. $ScriptDir/Helper-Functions.ps1
     
 ####################################################        
-    $AuthToken = Get-AuthToken
-    $Global:PSDefaultParameterValues["*:AuthToken"] = $AuthToken 
+Write-Host "Authenticating to Azure AD - Check authentication window" -ForegroundColor DarkGreen
+$User = (Connect-AzureAD).Account.Id    
+$AuthToken = Get-AuthToken -User $User
+$Global:PSDefaultParameterValues["*:AuthToken"] = $AuthToken 
 ####################################################    
 
 #write-host "Adding App Registrtion"
@@ -36,22 +44,22 @@ write-host "Loading helper functions"
 #Start-Sleep -s 5
 
 Write-Host "Creating Scope tag"
-Create-IntuneScopeTag -Name 'Privileged-Identity' -Description 'Tag for privileged identities'
+Add-IntuneScopeTag -Name 'Privileged-Identity' -Description 'Tag for privileged identities' | Out-Null
 
 Write-Host "Adding Device Configuration Profiles"
-. $ScriptDir/Import-PAW-DeviceConfiguration.ps1
+. $ScriptDir/Import-DeviceConfiguration.ps1 -ImportPath "$ConfigPath\JSON\DeviceConfiguration"
 Start-Sleep -s 5
 
 Write-Host "Adding Device Compliance Policies"
-. $ScriptDir/Import-PAW-DeviceCompliancePolicies.ps1
+. $ScriptDir/Import-DeviceCompliancePolicies.ps1 -ImportPath "$ConfigPath\JSON\DeviceCompliance"
 Start-Sleep -s 5
 
 Write-Host "Adding ADMX Device settings"
-. $ScriptDir/Import-PAW-DeviceConfigurationADMX.ps1 -AADGroup 'Secure Workstations'
+. $ScriptDir/Import-DeviceConfigurationADMX.ps1 -ImportPath "$ConfigPath\JSON\DeviceConfigurationADMX" -AADGroup 'Secure Workstations'
 Start-Sleep -s 5
 
 Write-Host "Adding PS1 Config scripts"
-. $ScriptDir/Import-DeviceConfigScript.ps1 -ImportPath $ScriptDir/Scripts  -AADGroup 'Secure Workstations'
+. $ScriptDir/Import-DeviceConfigScript.ps1 -ImportPath "$ConfigPath\JSON\DeviceManagementScripts"  -AADGroup 'Secure Workstations'
 Start-Sleep -s 5
 
 #write-host "Adding Enrollment Status Page"
