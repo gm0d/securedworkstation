@@ -30,8 +30,8 @@
             "mailEnabled": false,
             "mailNickname": "group",
             "securityEnabled": true,
-            "isAssignableToRole": true            
-        },        
+            "isAssignableToRole": true
+        },
         {
             "DisplayName": "SAW-Users",
             "Description": "Users allowed to join devices to Azure AD",
