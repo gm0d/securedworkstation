@@ -1,0 +1,20 @@
+{
+    "userDeviceQuota": 50,
+    "multiFactorAuthConfiguration": "0",
+    "id": "deviceRegistrationPolicy",
+    "displayName": "Device Registration Policy",
+    "azureADRegistration": {
+        "appliesTo": "1",
+        "isAdminConfigurable": false,
+        "allowedUsers": [],
+        "allowedGroups": []
+    },
+    "azureADJoin": {
+        "appliesTo": "2",
+        "isAdminConfigurable": true,
+        "allowedUsers": [],
+        "allowedGroups": [
+            "replace with Group Name"
+        ]
+    }
+}
