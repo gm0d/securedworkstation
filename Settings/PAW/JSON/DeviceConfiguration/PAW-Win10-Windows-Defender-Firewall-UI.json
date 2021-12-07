@@ -788,14 +788,25 @@
     "assignments@odata.context": "https://graph.microsoft.com/beta/$metadata#deviceManagement/deviceConfigurations(\u00279218cdda-e28d-451e-96c6-1e6b9a9f292d\u0027)/microsoft.graph.windows10CustomConfiguration/microsoft.graph.windows10CustomConfiguration/microsoft.graph.windows10EndpointProtectionConfiguration/microsoft.graph.windows10CustomConfiguration/microsoft.graph.windows10GeneralConfiguration/microsoft.graph.windows10GeneralConfiguration/microsoft.graph.windows10CustomConfiguration/microsoft.graph.windowsIdentityProtectionConfiguration/microsoft.graph.windows10CustomConfiguration/microsoft.graph.windows10GeneralConfiguration/microsoft.graph.windows10EndpointProtectionConfiguration/microsoft.graph.windows10EndpointProtectionConfiguration/microsoft.graph.windows10CustomConfiguration/microsoft.graph.windows10CustomConfiguration/microsoft.graph.windows10GeneralConfiguration/microsoft.graph.windows10EndpointProtectionConfiguration/microsoft.graph.windowsIdentityProtectionConfiguration/microsoft.graph.windows10CustomConfiguration/microsoft.graph.windows10CustomConfiguration/microsoft.graph.windows10GeneralConfiguration/microsoft.graph.windows10EndpointProtectionConfiguration/microsoft.graph.windowsIdentityProtectionConfiguration/assignments",
     "assignments": [
         {
-            "id": "9218cdda-e28d-451e-96c6-1e6b9a9f292d_bd1f65b9-891f-40ed-89c2-22433a98ea02",
+            "id": "00000000-0000-0000-0000-000000000000_00000000-0000-0000-0000-000000000000",
             "source": "direct",
-            "sourceId": "9218cdda-e28d-451e-96c6-1e6b9a9f292d",
+            "sourceId": "00000000-0000-0000-0000-000000000000",
             "target": {
                 "@odata.type": "#microsoft.graph.groupAssignmentTarget",
                 "deviceAndAppManagementAssignmentFilterId": null,
                 "deviceAndAppManagementAssignmentFilterType": "none",
-                "groupId": "Secure-Access-Workstations"
+                "groupId": "SAW-Devices-UserDriven"
+            }
+        },
+        {
+            "id": "00000000-0000-0000-0000-000000000000_00000000-0000-0000-0000-000000000000",
+            "source": "direct",
+            "sourceId": "00000000-0000-0000-0000-000000000000",
+            "target": {
+                "@odata.type": "#microsoft.graph.groupAssignmentTarget",
+                "deviceAndAppManagementAssignmentFilterId": null,
+                "deviceAndAppManagementAssignmentFilterType": "none",
+                "groupId": "SAW-Devices-SelfDeploying"
             }
         }
     ]

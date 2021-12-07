@@ -1,6 +1,6 @@
 {
     "settings": {
-        "displayName": "Secure Workstation SelfDeploying",
+        "displayName": "Secure Workstation - SelfDeploying",
         "description": "Profile for Self Deploying to AAD",
         "mode": "SelfDeployingAAD",
         "ConvertDeviceToAutopilot": true,

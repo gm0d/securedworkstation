@@ -25,12 +25,12 @@ Get-ChildItem $ImportPath -filter *.json |
         $JSON_Convert = $JSON_Data | ConvertFrom-Json | Select-Object -Property * -ExcludeProperty id, createdDateTime, lastModifiedDateTime, version, supportsScopeTags
         $DisplayName = $JSON_Convert.displayName
         
-        $DuplicateDCP = Get-DeviceConfigurationPolicy -Name $JSON_Convert.displayName
+        $DuplicateDCP = Get-MgDeviceManagementDeviceConfiguration -filter "displayname eq '$($JSON_Convert.displayName)'"        
         
         If ($DuplicateDCP -eq $null) {
             #region Replace scope tags with actual values
             $JSON_Convert.roleScopeTagIds = @($JSON_Convert.roleScopeTagIds | ForEach-Object {
-                $st = Get-IntuneScopeTag -AuthToken $AuthToken -Name $PSItem
+                $st = Get-MgDeviceManagementRoleScopeTag -filter "displayname eq '$PSItem'"                
                 if($st){ # If scope tag was found, replace with the id
                     $st.id
                 }
@@ -40,42 +40,34 @@ Get-ChildItem $ImportPath -filter *.json |
             })
             #endregion
 
-            $JSON_Output = $JSON_Convert | ConvertTo-Json -Depth 5                        
-            Write-Verbose "Device Configuration Policy '$DisplayName' Found..."            
+            $JSON_Output = $JSON_Convert | ConvertTo-Json -Depth 5                                    
             Write-Host "Adding Device Configuration Policy '$DisplayName'" -ForegroundColor Green
-            Add-DeviceConfigurationPolicy -JSON $JSON_Output
-
-            $DeviceConfigs = Get-DeviceConfigurationPolicy -name $DisplayName
-            $DeviceConfigID = $DeviceConfigs.id
-            Write-Host "Device ConfigID '$DeviceConfigID'" -ForegroundColor Green 
-            Write-Host
+            $DeviceConfig = New-MgDeviceManagementDeviceConfiguration -BodyParameter $JSON_Output            
+            Write-Verbose "Device ConfigID [$($DeviceConfigID.id)]"            
             
             #region Replace group assignments with actual values
-            $ConfigurationAssignments = @($JSON_Convert.assignments | 
+            $JSON_Convert.assignments | 
                 ForEach-Object {
                     Write-Verbose "AAD Group Name: $($PSItem.target.groupId)"
                     Write-Verbose "Assignment Type: $($PSItem.target."@OData.type")"
                     
-                    $TargetGroupId = (Get-AADGroup -Filter "displayName eq '$($PSItem.target.groupId)'").id 
+                    $TargetGroupId = (Get-MgGroup -Filter "displayName eq '$($PSItem.target.groupId)'").id 
                     if ($TargetGroupID){
-                        Write-Verbose "Included Group ID:" $TargetGroupID -ForegroundColor Yellow                
-                        @{
+                        Write-Verbose "Included Group ID: $TargetGroupID"
+                        $Assignment = @{
                             target = @{
                                 "@odata.type" = $PSItem.target."@OData.type" 
                                 groupId       = $TargetGroupId
                             }
-                        }   
+                        } | ConvertTo-Json -Depth 5
+                        $DeviceConfigurationAssignment = New-MgDeviceManagementDeviceConfigurationAssignment -DeviceConfigurationId $DeviceConfig.id -BodyParameter $Assignment
+                        Add-DeviceConfigurationPolicyAssignment -Assignments $ConfigurationAssignments -ConfigurationPolicyId $DeviceConfigID
+                        Write-Verbose "Device configuration assignment [$($DeviceConfigurationAssignment.id)] created"
                     }
                     else{
                         Write-Warning "Group [$($PSItem.target.groupId)] not found skipping assignment"
                     }                              
-                })
-            if($ConfigurationAssignments){
-                Add-DeviceConfigurationPolicyAssignment -Assignments $ConfigurationAssignments -ConfigurationPolicyId $DeviceConfigID
-            }
-            else{
-                Write-Warning 'No configuration assignments found'
-            }            
+                }
         }        
         else {
             Write-Warning "Device Configuration Profile: $($JSON_Convert.displayName) has already been created"

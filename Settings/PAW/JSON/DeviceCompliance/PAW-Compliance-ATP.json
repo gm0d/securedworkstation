@@ -41,27 +41,27 @@
     "tpmRequired": false,
     "deviceCompliancePolicyScript": null,
     "validOperatingSystemBuildRanges": [],
-    "assignments": [
+    "assignments": [        
         {
-            "id": "a8994b69-5205-4614-ae3e-150c2d4f2c5d_add56c8b-3fb1-43c8-a7d8-3abcc9f9ac64",
+            "id": "00000000-0000-0000-0000-000000000000_00000000-0000-0000-0000-000000000000",
             "source": "direct",
-            "sourceId": "a8994b69-5205-4614-ae3e-150c2d4f2c5d",
-            "target": {
-                "@odata.type": "#microsoft.graph.exclusionGroupAssignmentTarget",
-                "deviceAndAppManagementAssignmentFilterId": null,
-                "deviceAndAppManagementAssignmentFilterType": "none",
-                "groupId": "AAD-PrivAccounts"
-            }
-        },
-        {
-            "id": "a8994b69-5205-4614-ae3e-150c2d4f2c5d_af977e97-e18b-4272-bb63-81fb28204780",
-            "source": "direct",
-            "sourceId": "a8994b69-5205-4614-ae3e-150c2d4f2c5d",
+            "sourceId": "00000000-0000-0000-0000-000000000000",
             "target": {
                 "@odata.type": "#microsoft.graph.groupAssignmentTarget",
                 "deviceAndAppManagementAssignmentFilterId": null,
                 "deviceAndAppManagementAssignmentFilterType": "none",
-                "groupId": "Secure Workstations SelfDeploying"
+                "groupId": "SAW-Devices-UserDriven"
+            }
+        },
+        {
+            "id": "00000000-0000-0000-0000-000000000000_00000000-0000-0000-0000-000000000000",
+            "source": "direct",
+            "sourceId": "00000000-0000-0000-0000-000000000000",
+            "target": {
+                "@odata.type": "#microsoft.graph.groupAssignmentTarget",
+                "deviceAndAppManagementAssignmentFilterId": null,
+                "deviceAndAppManagementAssignmentFilterType": "none",
+                "groupId": "SAW-Devices-SelfDeploying"
             }
         }
     ],

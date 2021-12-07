@@ -11,7 +11,7 @@ $ImportPath = $ScriptDir+"\Scripts\SPE-DeviceConfig.ps1"
 
 ####################################################
 
-function Get-AuthToken {
+function Get-AuthHeader {
 
     <#
 .SYNOPSIS
@@ -19,10 +19,10 @@ This function is used to authenticate with the Graph API REST interface
 .DESCRIPTION
 The function authenticate with the Graph API Interface with the tenant name
 .EXAMPLE
-Get-AuthToken
+Get-AuthHeader
 Authenticates you with the Graph API interface
 .NOTES
-NAME: Get-AuthToken
+NAME: Get-AuthHeader
 #>
 
     [cmdletbinding()]
@@ -229,7 +229,7 @@ NAME: Add-DeviceManagementScript
 
     try {
         $uri = "https://graph.microsoft.com/$graphApiVersion/$DMS_resource"
-        Invoke-RestMethod -Uri $uri -Headers $authToken -Method Post -Body $JSON -ContentType "application/json"
+        Invoke-RestMethod -Uri $uri -Headers $AuthHeader -Method Post -Body $JSON -ContentType "application/json"
     }
 
     catch {
@@ -304,7 +304,7 @@ NAME: Add-DeviceConfigurationPolicyAssignment
 "@
 
         $uri = "https://graph.microsoft.com/$graphApiVersion/$Resource"
-        Invoke-RestMethod -Uri $uri -Headers $authToken -Method Post -Body $JSON -ContentType "application/json"
+        Invoke-RestMethod -Uri $uri -Headers $AuthHeader -Method Post -Body $JSON -ContentType "application/json"
 
     }
 
@@ -358,14 +358,14 @@ NAME: Get-AADGroup
         if ($id) {
 
             $uri = "https://graph.microsoft.com/$graphApiVersion/$($Group_resource)?`$filter=id eq '$id'"
-            (Invoke-RestMethod -Uri $uri -Headers $authToken -Method Get).Value
+            (Invoke-RestMethod -Uri $uri -Headers $AuthHeader -Method Get).Value
 
         }
 
         elseif ($GroupName -eq "" -or $GroupName -eq $null) {
 
             $uri = "https://graph.microsoft.com/$graphApiVersion/$($Group_resource)"
-            (Invoke-RestMethod -Uri $uri -Headers $authToken -Method Get).Value
+            (Invoke-RestMethod -Uri $uri -Headers $AuthHeader -Method Get).Value
 
         }
 
@@ -374,14 +374,14 @@ NAME: Get-AADGroup
             if (!$Members) {
 
                 $uri = "https://graph.microsoft.com/$graphApiVersion/$($Group_resource)?`$filter=displayname eq '$GroupName'"
-                (Invoke-RestMethod -Uri $uri -Headers $authToken -Method Get).Value
+                (Invoke-RestMethod -Uri $uri -Headers $AuthHeader -Method Get).Value
 
             }
 
             elseif ($Members) {
 
                 $uri = "https://graph.microsoft.com/$graphApiVersion/$($Group_resource)?`$filter=displayname eq '$GroupName'"
-                $Group = (Invoke-RestMethod -Uri $uri -Headers $authToken -Method Get).Value
+                $Group = (Invoke-RestMethod -Uri $uri -Headers $AuthHeader -Method Get).Value
 
                 if ($Group) {
 
@@ -391,7 +391,7 @@ NAME: Get-AADGroup
                     write-host
 
                     $uri = "https://graph.microsoft.com/$graphApiVersion/$($Group_resource)/$GID/Members"
-                    (Invoke-RestMethod -Uri $uri -Headers $authToken -Method Get).Value
+                    (Invoke-RestMethod -Uri $uri -Headers $AuthHeader -Method Get).Value
 
                 }
             }
@@ -423,14 +423,14 @@ NAME: Get-AADGroup
 
 write-host
 
-# Checking if authToken exists before running authentication
-if ($global:authToken) {
+# Checking if AuthHeader exists before running authentication
+if ($global:AuthHeader) {
 
     # Setting DateTime to Universal time to work in all timezones
     $DateTime = (Get-Date).ToUniversalTime()
 
-    # If the authToken exists checking when it expires
-    $TokenExpires = ($authToken.ExpiresOn.datetime - $DateTime).Minutes
+    # If the AuthHeader exists checking when it expires
+    $TokenExpires = ($AuthHeader.ExpiresOn.datetime - $DateTime).Minutes
 
     if ($TokenExpires -le 0) {
 
@@ -446,12 +446,12 @@ if ($global:authToken) {
 
         }
 
-        $global:authToken = Get-AuthToken -User $User
+        $global:AuthHeader = Get-AuthHeader -User $User
 
     }
 }
 
-# Authentication doesn't exist, calling Get-AuthToken function
+# Authentication doesn't exist, calling Get-AuthHeader function
 
 else {
 
@@ -463,7 +463,7 @@ else {
     }
 
     # Getting the authorization token
-    $global:authToken = Get-AuthToken -User $User
+    $global:AuthHeader = Get-AuthHeader -User $User
 
 }
 

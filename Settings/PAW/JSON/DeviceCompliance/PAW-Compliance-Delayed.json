@@ -41,29 +41,7 @@
     "tpmRequired": true,
     "deviceCompliancePolicyScript": null,
     "validOperatingSystemBuildRanges": [],
-    "assignments": [
-        {
-            "id": "070e9f28-9bf1-41cc-b5bb-77229343d3b9_add56c8b-3fb1-43c8-a7d8-3abcc9f9ac64",
-            "source": "direct",
-            "sourceId": "070e9f28-9bf1-41cc-b5bb-77229343d3b9",
-            "target": {
-                "@odata.type": "#microsoft.graph.exclusionGroupAssignmentTarget",
-                "deviceAndAppManagementAssignmentFilterId": null,
-                "deviceAndAppManagementAssignmentFilterType": "none",
-                "groupId": "AAD-PrivAccounts"
-            }
-        },
-        {
-            "id": "070e9f28-9bf1-41cc-b5bb-77229343d3b9_af977e97-e18b-4272-bb63-81fb28204780",
-            "source": "direct",
-            "sourceId": "070e9f28-9bf1-41cc-b5bb-77229343d3b9",
-            "target": {
-                "@odata.type": "#microsoft.graph.groupAssignmentTarget",
-                "deviceAndAppManagementAssignmentFilterId": null,
-                "deviceAndAppManagementAssignmentFilterType": "none",
-                "groupId": "Secure Workstations SelfDeploying"
-            }
-        }
+    "assignments": [        
     ],
     "scheduledActionsForRule": [
         {

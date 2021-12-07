@@ -20,16 +20,19 @@ Write-Host "Loading helper functions"
 ####################################################        
 Write-Host "Authenticating to Azure AD - Check authentication window" -ForegroundColor DarkGreen
 $User = (Connect-AzureAD).Account.Id    
-$AuthToken = Get-AuthToken -User $User
-$Global:PSDefaultParameterValues["*:AuthToken"] = $AuthToken 
 ####################################################    
 
 #write-host "Adding App Registrtion"
 #. $ScriptDir/AppRegistration_Create.ps1
 #Start-Sleep -s 5
 
-#write-host "Adding required AAD Groups"
-# . $ScriptDir/AADGroups_Create.ps1
+# Get Auth token for Azure AD app id
+Write-Host "Adding required AAD Groups"
+Connect-MgGraph -AccessToken $(Get-AuthToken -User $User -ClientId '1b730954-1685-4b74-9bfd-dac224a7b894') # client ID of AzureAD app 
+. $ScriptDir/Import-AADObjects.ps1 -SettingsFile "$ConfigPath\AAD\Objects.json"
+
+# Reset Auth token
+$Global:PSDefaultParameterValues["*:AuthHeader"] = $(Get-AuthHeader -Token (Get-AuthToken -User $User)) # Client Id of Microsoft Intune App
 
 #write-host "Adding AAD Group Membership"
 # . $ScriptDir/AADGroupMemberships_Add.ps1
@@ -44,7 +47,9 @@ $Global:PSDefaultParameterValues["*:AuthToken"] = $AuthToken
 #Start-Sleep -s 5
 
 Write-Host "Creating Scope tag"
-Add-IntuneScopeTag -Name 'Privileged-Identity' -Description 'Tag for privileged identities' | Out-Null
+Select-MgProfile -Name "beta"
+Connect-MgGraph -AccessToken $(Get-AuthToken -User $User)
+New-MgDeviceManagementRoleScopeTag -DisplayName 'Privileged-Identity' -Description 'Tag for privileged identities'
 
 Write-Host "Adding Device Configuration Profiles"
 . $ScriptDir/Import-DeviceConfiguration.ps1 -ImportPath "$ConfigPath\JSON\DeviceConfiguration"

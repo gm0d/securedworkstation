@@ -30,7 +30,7 @@ Get-ChildItem $ImportPath -filter *.json |
         If ($DuplicateDMS -eq $null) {
             #region Replace scope tags with actual values
             $JSON_Convert.roleScopeTagIds = @($JSON_Convert.roleScopeTagIds | ForEach-Object {
-                $st = Get-IntuneScopeTag -AuthToken $AuthToken -Name $PSItem
+                $st = Get-IntuneScopeTag -AuthHeader $AuthHeader -Name $PSItem
                 if($st){ # If scope tag was found, replace with the id
                     $st.id
                 }

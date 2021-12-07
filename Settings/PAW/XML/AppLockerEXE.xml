@@ -92,4 +92,4 @@
 			<FilePathCondition Path="%OSDRIVE%\PROGRAMDATA\MICROSOFT\WINDOWS DEFENDER\PLATFORM\*" />
 		</Conditions>
 	</FilePathRule>
-</RuleCollection>
+</RuleCollection>		

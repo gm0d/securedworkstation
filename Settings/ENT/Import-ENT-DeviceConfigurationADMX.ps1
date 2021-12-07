@@ -15,7 +15,7 @@ param (
 $ScriptDir = Split-Path $script:MyInvocation.MyCommand.Path
 $ImportPath = $ScriptDir+"\JSON\DeviceConfigurationADMX"
 
-function Get-AuthToken
+function Get-AuthHeader
 {
 		
 <#
@@ -24,10 +24,10 @@ This function is used to authenticate with the Graph API REST interface
 .DESCRIPTION
 The function authenticate with the Graph API Interface with the tenant name
 .EXAMPLE
-Get-AuthToken
+Get-AuthHeader
 Authenticates you with the Graph API interface
 .NOTES
-NAME: Get-AuthToken
+NAME: Get-AuthHeader
 #>
 		
 		[cmdletbinding()]
@@ -200,7 +200,7 @@ NAME: Add-DeviceConfigurationPolicy
 		{
 			
 			$uri = "https://graph.microsoft.com/$graphApiVersion/$($DCP_resource)"
-			$responseBody = Invoke-RestMethod -Uri $uri -Headers $authToken -Method Post -Body $jsonCode -ContentType "application/json"
+			$responseBody = Invoke-RestMethod -Uri $uri -Headers $AuthHeader -Method Post -Body $jsonCode -ContentType "application/json"
 			
 			
 		}
@@ -266,7 +266,7 @@ Function Create-GroupPolicyConfigurationsDefinitionValues()
 				Test-JSON -JSON $JSON
 				
 				$uri = "https://graph.microsoft.com/$graphApiVersion/$($DCP_resource)"
-				Invoke-RestMethod -Uri $uri -Headers $authToken -Method Post -Body $JSON -ContentType "application/json"
+				Invoke-RestMethod -Uri $uri -Headers $AuthHeader -Method Post -Body $JSON -ContentType "application/json"
 			}
 			
 		}
@@ -322,7 +322,7 @@ param
 	{
 		
 		$uri = "https://graph.microsoft.com/$graphApiVersion/$($DCP_resource)"
-		(Invoke-RestMethod -Uri $uri -Headers $authToken -Method Get).Value | Where-Object { ($_.'displayName') -eq ("$Name") }
+		(Invoke-RestMethod -Uri $uri -Headers $AuthHeader -Method Get).Value | Where-Object { ($_.'displayName') -eq ("$Name") }
 		
 	}
 	
@@ -407,7 +407,7 @@ $Resource = "deviceManagement/groupPolicyConfigurations/$ConfigurationPolicyId/a
 "@
 
     $uri = "https://graph.microsoft.com/$graphApiVersion/$($Resource)"
-    Invoke-RestMethod -Uri $uri -Headers $authToken -Method Post -Body $JSON -ContentType "application/json"
+    Invoke-RestMethod -Uri $uri -Headers $AuthHeader -Method Post -Body $JSON -ContentType "application/json"
 
     }
     
@@ -468,7 +468,7 @@ $Group_resource = "groups"
         switch ( $id ) {
                 $AllUsers   { $grp = [PSCustomObject]@{ displayName = "All users"}; $grp           }
                 $AllDevices { $grp = [PSCustomObject]@{ displayName = "All devices"}; $grp         }
-                default     { (Invoke-RestMethod -Uri $uri -Headers $authToken -Method Get).Value  }
+                default     { (Invoke-RestMethod -Uri $uri -Headers $AuthHeader -Method Get).Value  }
                 }
                 
         }
@@ -476,7 +476,7 @@ $Group_resource = "groups"
         elseif($GroupName -eq "" -or $GroupName -eq $null){
 
         $uri = "https://graph.microsoft.com/$graphApiVersion/$($Group_resource)"
-        (Invoke-RestMethod -Uri $uri -Headers $authToken -Method Get).Value
+        (Invoke-RestMethod -Uri $uri -Headers $AuthHeader -Method Get).Value
 
         }
 
@@ -485,14 +485,14 @@ $Group_resource = "groups"
             if(!$Members){
 
             $uri = "https://graph.microsoft.com/$graphApiVersion/$($Group_resource)?`$filter=displayname eq '$GroupName'"
-            (Invoke-RestMethod -Uri $uri -Headers $authToken -Method Get).Value
+            (Invoke-RestMethod -Uri $uri -Headers $AuthHeader -Method Get).Value
 
             }
 
             elseif($Members){
 
             $uri = "https://graph.microsoft.com/$graphApiVersion/$($Group_resource)?`$filter=displayname eq '$GroupName'"
-            $Group = (Invoke-RestMethod -Uri $uri -Headers $authToken -Method Get).Value
+            $Group = (Invoke-RestMethod -Uri $uri -Headers $AuthHeader -Method Get).Value
 
                 if($Group){
 
@@ -502,7 +502,7 @@ $Group_resource = "groups"
                 write-host
 
                 $uri = "https://graph.microsoft.com/$graphApiVersion/$($Group_resource)/$GID/Members"
-                (Invoke-RestMethod -Uri $uri -Headers $authToken -Method Get).Value
+                (Invoke-RestMethod -Uri $uri -Headers $AuthHeader -Method Get).Value
 
                 }
 
@@ -584,15 +584,15 @@ NAME: Test-AuthHeader
 	
 	write-host
 	
-	# Checking if authToken exists before running authentication
-	if ($global:authToken)
+	# Checking if AuthHeader exists before running authentication
+	if ($global:AuthHeader)
 	{
 		
 		# Setting DateTime to Universal time to work in all timezones
 		$DateTime = (Get-Date).ToUniversalTime()
 		
-		# If the authToken exists checking when it expires
-		$TokenExpires = ($authToken.ExpiresOn.datetime - $DateTime).Minutes
+		# If the AuthHeader exists checking when it expires
+		$TokenExpires = ($AuthHeader.ExpiresOn.datetime - $DateTime).Minutes
 		
 		if ($TokenExpires -le 0)
 		{
@@ -610,12 +610,12 @@ NAME: Test-AuthHeader
 				
 			}
 			
-			$global:authToken = Get-AuthToken -User $User
+			$global:AuthHeader = Get-AuthHeader -User $User
 			
 		}
 	}
 	
-	# Authentication doesn't exist, calling Get-AuthToken function
+	# Authentication doesn't exist, calling Get-AuthHeader function
 	
 	else
 	{
@@ -629,7 +629,7 @@ NAME: Test-AuthHeader
 		}
 		
 		# Getting the authorization token
-		$global:authToken = Get-AuthToken -User $User
+		$global:AuthHeader = Get-AuthHeader -User $User
 		
 	}
 	
