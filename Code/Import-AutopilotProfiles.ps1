@@ -21,11 +21,13 @@ Get-ChildItem $ImportPath -filter *.json |
         If ($AutopilotProfile -eq $null) {
             #region Replace scope tags with actual values
             $JSON_Convert.roleScopeTagIds = @($JSON_Convert.roleScopeTagIds | ForEach-Object {
-                $st = Get-IntuneScopeTag -Name $PSItem
-                if($st){ # If scope tag was found, replace with the id
+                $st = Get-MgDeviceManagementRoleScopeTag -filter "displayname eq '$PSItem'"
+                if ($st) {
+                    # If scope tag was found, replace with the id
                     $st.id
                 }
-                else{ # Scope Tag not found, replace with Default
+                else {
+                    # Scope Tag not found, replace with Default
                     0
                 }
             })
@@ -40,7 +42,7 @@ Get-ChildItem $ImportPath -filter *.json |
             Write-Verbose "Creating assignments for profile"
             $JSON_Convert.assignments | 
                 ForEach-Object {
-                    $TargetGroupId = (Get-AADGroup -Filter "displayName eq '$PSItem'").id
+                    $TargetGroupId = (Get-MgGroup -Filter "displayName eq '$PSItem'").id
                     if ($TargetGroupID){
                         Set-AutopilotProfileAssignedGroup -id $Profile.id -groupid $TargetGroupId | Out-Null
                 }

@@ -1,10 +1,10 @@
 {
     "settings": {
-        "displayName": "Secure Workstation - User Driven",
+        "displayName": "Secure Workstation User Driven",
         "description": "Profile for SAW User driven",
         "mode": "UserDrivenAAD",
         "ConvertDeviceToAutopilot": true,
-        "OOBE_language": "os-default",
+        "OOBE_language": "os_default",
         "OOBE_skipKeyboard": true,
         "OOBE_NameTemplate": "SAW-%SERIAL%",
         "OOBE_EnableWhiteGlove": false,
@@ -18,6 +18,6 @@
         "Privileged-Identity"
     ],
     "assignments": [
-        "Secure-Workstations"
+        "SAW-Devices-UserDriven"
     ]
 }

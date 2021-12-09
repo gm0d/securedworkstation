@@ -60,8 +60,7 @@ Get-ChildItem $ImportPath -filter *.json |
                                 groupId       = $TargetGroupId
                             }
                         } | ConvertTo-Json -Depth 5
-                        $DeviceConfigurationAssignment = New-MgDeviceManagementDeviceConfigurationAssignment -DeviceConfigurationId $DeviceConfig.id -BodyParameter $Assignment
-                        Add-DeviceConfigurationPolicyAssignment -Assignments $ConfigurationAssignments -ConfigurationPolicyId $DeviceConfigID
+                        $DeviceConfigurationAssignment = New-MgDeviceManagementDeviceConfigurationAssignment -DeviceConfigurationId $DeviceConfig.id -BodyParameter $Assignment                        
                         Write-Verbose "Device configuration assignment [$($DeviceConfigurationAssignment.id)] created"
                     }
                     else{

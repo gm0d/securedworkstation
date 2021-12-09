@@ -1,0 +1,31 @@
+{
+    "displayName": "Secure Workstation",
+    "description": "",
+    "priority": 1,
+    "roleScopeTagIds": [
+        "Privileged-Identity"
+    ],
+    "showInstallationProgress": true,
+    "blockDeviceSetupRetryByUser": false,
+    "allowDeviceResetOnInstallFailure": true,
+    "allowLogCollectionOnInstallFailure": true,
+    "customErrorMessage": "Installation exceeded the time limit set by your organization. Please try again or contact your IT support person for help.",
+    "installProgressTimeoutInMinutes": 90,
+    "allowDeviceUseOnInstallFailure": false,
+    "selectedMobileAppIds": [],    
+    "disableUserStatusTrackingAfterFirstUser": true,
+    "assignments": [        
+        {
+            "target": {
+                "@odata.type": "#microsoft.graph.groupAssignmentTarget",
+                "groupId": "SAW-Devices-UserDriven"
+            }
+        },
+        {
+            "target": {
+                "@odata.type": "#microsoft.graph.groupAssignmentTarget",
+                "groupId": "SAW-Devices-SelfDeploying"
+            }
+        }
+    ]
+}

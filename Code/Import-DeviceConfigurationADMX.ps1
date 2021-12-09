@@ -18,7 +18,7 @@ param (
 
 	[Parameter(Mandatory = $true)]
     [ValidateScript( {
-        if (-Not (Get-AADGroup "displayName eq '$_'") ) {
+        if (-Not (Get-MgGroup -filter "displayName eq '$_'") ) {
             throw "Group does not exist in AD"
         }    
         return $true
@@ -26,7 +26,7 @@ param (
     [String]$AADGroup	
 )
 
-$TargetGroupId = Get-AADGroup -Filter "displayName eq '$AADGroup'"
+$TargetGroupId = (Get-MgGroup -Filter "displayName eq '$AADGroup'").id
 
 Get-ChildItem $ImportPath -filter *.json |  
 ForEach-Object {	
