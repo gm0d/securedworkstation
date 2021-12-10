@@ -16,5 +16,8 @@
         "allowedGroups": [
             "replace with Group Name"
         ]
-    }
+    },
+    "roleScopeTags":[
+        "Privileged-Identity"
+    ]
 }

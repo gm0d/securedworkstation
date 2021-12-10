@@ -1,8 +1,6 @@
 {
     "@odata.type": "#microsoft.graph.windows10CompliancePolicy",
-    "roleScopeTagIds": [
-        "Privileged-Identity"
-    ],
+    "roleScopeTagIds": [],
     "id": "a8994b69-5205-4614-ae3e-150c2d4f2c5d",
     "createdDateTime": "2020-11-30T15:27:50.8972649Z",
     "description": "Defender ATP-specific compliance settings to apply after 24 hours\n",
@@ -41,7 +39,7 @@
     "tpmRequired": false,
     "deviceCompliancePolicyScript": null,
     "validOperatingSystemBuildRanges": [],
-    "assignments": [        
+    "assignments": [
         {
             "id": "00000000-0000-0000-0000-000000000000_00000000-0000-0000-0000-000000000000",
             "source": "direct",

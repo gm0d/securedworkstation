@@ -28,18 +28,6 @@ Get-ChildItem $ImportPath -filter *.json |
         $DuplicateDMS = Get-DeviceManagementScript -Name $JSON_Convert.displayName
         
         If ($DuplicateDMS -eq $null) {
-            #region Replace scope tags with actual values
-            $JSON_Convert.roleScopeTagIds = @($JSON_Convert.roleScopeTagIds | ForEach-Object {
-                $st = Get-IntuneScopeTag -AuthHeader $AuthHeader -Name $PSItem
-                if($st){ # If scope tag was found, replace with the id
-                    $st.id
-                }
-                else{ # Scope Tag not found, replace with Default
-                    0
-                }
-            })
-            #endregion
-
             $JSON_Output = $JSON_Convert | ConvertTo-Json -Depth 5              
             
             Write-Host "Adding Device Configuration Script from [$($JSON_Convert.fileName)]" -ForegroundColor Green

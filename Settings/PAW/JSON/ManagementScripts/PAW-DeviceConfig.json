@@ -10,9 +10,7 @@
     "lastModifiedDateTime": "2021-10-28T23:44:09.9213578Z",
     "runAsAccount": "system",
     "fileName": "PAW-DeviceConfig.ps1",
-    "roleScopeTagIds": [
-        "Privileged-Identity"
-    ],
+    "roleScopeTagIds": [],
     "assignments": [
         "Secure-Workstations"
     ]

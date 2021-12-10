@@ -18,21 +18,7 @@ Get-ChildItem $ImportPath -filter *.json |
         
         $AutopilotProfile = Get-AutopilotProfile | Where-Object displayName -eq $JSON_Convert.settings.displayName
         
-        If ($AutopilotProfile -eq $null) {
-            #region Replace scope tags with actual values
-            $JSON_Convert.roleScopeTagIds = @($JSON_Convert.roleScopeTagIds | ForEach-Object {
-                $st = Get-MgDeviceManagementRoleScopeTag -filter "displayname eq '$PSItem'"
-                if ($st) {
-                    # If scope tag was found, replace with the id
-                    $st.id
-                }
-                else {
-                    # Scope Tag not found, replace with Default
-                    0
-                }
-            })
-            #endregion
-                        
+        If ($AutopilotProfile -eq $null) {            
             Write-Host "Adding Autopilot profile [$($JSON_Convert.Settings.displayName)]" -ForegroundColor Green
             $Properties = Convert-ObjectToHashTable $JSON_Convert.Settings 
             $Profile = New-AutopilotProfile @Properties 

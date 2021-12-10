@@ -18,21 +18,7 @@ Get-ChildItem $ImportPath -filter *.json |
         
         $ESPage = Get-EnrollmentStatusPage | Where-Object displayName -eq $JSON_Convert.displayName
         
-        If ($ESPage -eq $null) {
-            #region Replace scope tags with actual values
-            $JSON_Convert.roleScopeTagIds = @($JSON_Convert.roleScopeTagIds | ForEach-Object {
-                $st = Get-MgDeviceManagementRoleScopeTag -filter "displayname eq '$PSItem'"
-                if ($st) {
-                    # If scope tag was found, replace with the id
-                    $st.id
-                }
-                else {
-                    # Scope Tag not found, replace with Default
-                    0
-                }
-            })
-            #endregion
-                        
+        If ($ESPage -eq $null) {                        
             Write-Host "Adding Enrollment status page [$($JSON_Convert.displayName)]" -ForegroundColor Green
             $Properties = @{
                 DisplayName = $JSON_Convert.displayName

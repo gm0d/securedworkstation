@@ -1,8 +1,6 @@
 {
     "@odata.type": "#microsoft.graph.windows10CompliancePolicy",
-    "roleScopeTagIds": [
-        "Privileged-Identity"
-    ],
+    "roleScopeTagIds": [],
     "id": "070e9f28-9bf1-41cc-b5bb-77229343d3b9",
     "createdDateTime": "2020-11-30T15:27:52.1330905Z",
     "description": "Intune compliance settings to apply after 24 hours\n",
@@ -41,8 +39,7 @@
     "tpmRequired": true,
     "deviceCompliancePolicyScript": null,
     "validOperatingSystemBuildRanges": [],
-    "assignments": [        
-    ],
+    "assignments": [],
     "scheduledActionsForRule": [
         {
             "id": "070e9f28-9bf1-41cc-b5bb-77229343d3b9",

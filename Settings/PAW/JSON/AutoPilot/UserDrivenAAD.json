@@ -14,8 +14,7 @@
         "OOBE_HideChangeAccountOpts": true,
         "OOBE_SkipConnectivityCheck": true
     },
-    "roleScopeTagIds": [
-        "Privileged-Identity"
+    "roleScopeTagIds": [        
     ],
     "assignments": [
         "SAW-Devices-UserDriven"

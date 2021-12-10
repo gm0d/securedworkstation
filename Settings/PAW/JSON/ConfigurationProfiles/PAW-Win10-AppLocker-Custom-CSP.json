@@ -2,9 +2,7 @@
     "@odata.type": "#microsoft.graph.windows10CustomConfiguration",
     "id": "670ab606-890e-4f13-9b7f-912bff4a044a",
     "lastModifiedDateTime": "2020-11-25T05:23:16.4912608Z",
-    "roleScopeTagIds": [
-        "Privileged-Identity"
-    ],
+    "roleScopeTagIds": [],
     "supportsScopeTags": true,
     "deviceManagementApplicabilityRuleOsEdition": null,
     "deviceManagementApplicabilityRuleOsVersion": null,

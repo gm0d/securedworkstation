@@ -25,22 +25,7 @@ Foreach-object {
     $DisplayName = $JSON_Convert.displayName
     $DuplicateDCP = Get-MgDeviceManagementDeviceCompliancePolicy -filter "displayname eq '$($JSON_Convert.displayName)'"  
         
-    If ($DuplicateDCP -eq $null) {
-        #region Replace scope tags with actual values
-        $JSON_Convert.roleScopeTagIds = @($JSON_Convert.roleScopeTagIds | 
-            ForEach-Object {
-                $st = Get-MgDeviceManagementRoleScopeTag -filter "displayname eq '$PSItem'"
-                if ($st) {
-                    # If scope tag was found, replace with the id
-                    $st.id
-                }
-                else {
-                    # Scope Tag not found, replace with Default
-                    0
-                }
-            })
-        #endregion
-                    
+    If ($DuplicateDCP -eq $null) {                   
         $JSON_Output = $JSON_Convert | ConvertTo-Json -Depth 10            
         Write-Host "Adding Device Configuration Policy [$DisplayName]" -ForegroundColor Green
         $DeviceCompliancePolicy = New-MgDeviceManagementDeviceCompliancePolicy -BodyParameter $JSON_Output                        

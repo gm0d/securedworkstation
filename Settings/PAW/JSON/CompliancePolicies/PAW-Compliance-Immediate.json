@@ -1,8 +1,6 @@
 {
     "@odata.type": "#microsoft.graph.windows10CompliancePolicy",
-    "roleScopeTagIds": [
-        "Privileged-Identity"
-    ],
+    "roleScopeTagIds": [],
     "id": "56454fb5-78ae-4489-a4de-c60aeeb4bb8b",
     "createdDateTime": "2020-11-30T15:27:53.2888215Z",
     "description": "Intune compliance settings to apply immediately\n",

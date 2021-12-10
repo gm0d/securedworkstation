@@ -28,18 +28,6 @@ Get-ChildItem $ImportPath -filter *.json |
         $DuplicateDCP = Get-MgDeviceManagementDeviceConfiguration -filter "displayname eq '$($JSON_Convert.displayName)'"        
         
         If ($DuplicateDCP -eq $null) {
-            #region Replace scope tags with actual values
-            $JSON_Convert.roleScopeTagIds = @($JSON_Convert.roleScopeTagIds | ForEach-Object {
-                $st = Get-MgDeviceManagementRoleScopeTag -filter "displayname eq '$PSItem'"                
-                if($st){ # If scope tag was found, replace with the id
-                    $st.id
-                }
-                else{ # Scope Tag not found, replace with Default
-                    0
-                }
-            })
-            #endregion
-
             $JSON_Output = $JSON_Convert | ConvertTo-Json -Depth 5                                    
             Write-Host "Adding Device Configuration Policy '$DisplayName'" -ForegroundColor Green
             $DeviceConfig = New-MgDeviceManagementDeviceConfiguration -BodyParameter $JSON_Output            
