@@ -1,5 +1,5 @@
 #Requires -PSEdition Desktop
-#Requires -Modules @{ModuleName="AzureAD"; ModuleVersion="2.0.2" }, @{ModuleName="WindowsAutopilotIntune"; ModuleVersion="5.0"}, @{ModuleName="Microsoft.Graph"; ModuleVersion="1.8.0" }
+#Requires -Modules @{ModuleName="AzureAD"; ModuleVersion="2.0.2" }, @{ModuleName="WindowsAutopilotIntune"; ModuleVersion="5.0"}, @{ModuleName="Microsoft.Graph.Authentication"; ModuleVersion="1.8.0" }, @{ModuleName="Microsoft.Graph.DeviceManagement"; ModuleVersion="1.8.0" }
 
 [cmdletbinding()]
 param(        
@@ -7,33 +7,33 @@ param(
     $Configuration = "PAW"
 )
 
-Select-MgProfile -Name "beta"
-
 # Determine script location for PowerShell
 $ScriptDir = Split-Path $script:MyInvocation.MyCommand.Path
 $ConfigPath = Resolve-Path $ScriptDir\..\Settings\$Configuration
 
 Write-Host "Loading helper functions"
 . $ScriptDir/Helper-Functions.ps1
+Select-MgProfile -Name "beta"
     
 ####################################################        
 Write-Host "Authenticating to Azure AD - Check authentication window" -ForegroundColor DarkGreen
 $User = (Connect-AzureAD).Account.Id  
-Connect-MsGraph  
+Connect-MsGraph | Out-Null
 ####################################################    
 
 # Get Auth token for Azure AD app id
 Write-Host "Adding required AAD Groups"
-Connect-MgGraph -AccessToken $(Get-AuthToken -User $User -ClientId '1b730954-1685-4b74-9bfd-dac224a7b894') # client ID of AzureAD app 
+Connect-MgGraph -AccessToken $(Get-AuthToken -User $User -ClientId '1b730954-1685-4b74-9bfd-dac224a7b894') | Out-Null # client ID of AzureAD app 
 . $ScriptDir/Import-AADObjects.ps1 -SettingsFile "$ConfigPath\JSON\AAD\Objects.json"
-
-Connect-MgGraph -AccessToken $(Get-AuthToken -User $User)
-Write-Host "Adding Device Configuration Profiles"
-. $ScriptDir/Import-ConfigurationProfiles.ps1 -ImportPath "$ConfigPath\JSON\ConfigurationProfiles"
 Start-Sleep -s 5
 
+Connect-MgGraph -AccessToken $(Get-AuthToken -User $User) | Out-Null
 Write-Host "Adding Device Compliance Policies"
 . $ScriptDir/Import-CompliancePolicies.ps1 -ImportPath "$ConfigPath\JSON\CompliancePolicies"
+Start-Sleep -s 5
+
+Write-Host "Adding Device Configuration Profiles"
+. $ScriptDir/Import-ConfigurationProfiles.ps1 -ImportPath "$ConfigPath\JSON\ConfigurationProfiles"
 Start-Sleep -s 5
 
 # MsGraph stuff

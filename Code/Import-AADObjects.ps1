@@ -17,6 +17,13 @@ $AADObjects = Get-Content $SettingsFile | ConvertFrom-Json
 # Create AAD groups for Intune
 $AADObjects.Groups | ForEach-Object {
     $GroupParams = Convert-ObjectToHashtable $_
-    New-MgGroup @GroupParams
+    if (Get-MgGroup -Filter "displayName eq '$($PSItem.DisplayName)'"){
+        Write-Warning "Group [$($PSItem.DisplayName)] already exist, skipping"
+    }
+    else{
+        $Group = New-MgGroup @GroupParams
+        Write-Host "`tGroup [$($Group.DisplayName)] created" -ForegroundColor Green
+    }
+    
 }
 

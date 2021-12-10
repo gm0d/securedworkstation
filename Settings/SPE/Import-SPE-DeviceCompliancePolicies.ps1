@@ -580,11 +580,11 @@ Foreach-object {
             #$JSON_Output = $JSON_Output + $scheduledActionsForRule + "`r`n" + "}"
             
             write-host
-            write-host "Device Configuration Policy '$DisplayName' Found..." -ForegroundColor Yellow
+            write-host "Device Configuration Profile '$DisplayName' Found..." -ForegroundColor Yellow
             write-host
             $JSON_Output
             write-host
-            Write-Host "Adding Device Configuration Policy '$DisplayName'" -ForegroundColor Yellow
+            Write-Host "Adding Device Configuration Profile '$DisplayName'" -ForegroundColor Yellow
 
             Add-DeviceCompliancePolicy -JSON $JSON_Output
 
@@ -592,7 +592,7 @@ Foreach-object {
 
             $CompliancePolicyId = $DCPProfile.id
 
-            Write-Host "Device Configuration Policy ID '$CompliancePolicyId'" -ForegroundColor Yellow
+            Write-Host "Device Configuration Profile ID '$CompliancePolicyId'" -ForegroundColor Yellow
             Write-Host
             $AADGroups = $JSON_Convert.assignments.target
 

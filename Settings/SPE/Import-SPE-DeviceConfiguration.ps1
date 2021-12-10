@@ -156,12 +156,12 @@ Function Add-DeviceConfigurationPolicy(){
 
 <#
 .SYNOPSIS
-This function is used to add an device configuration policy using the Graph API REST interface
+This function is used to add an Device Configuration Profile using the Graph API REST interface
 .DESCRIPTION
-The function connects to the Graph API Interface and adds a device configuration policy
+The function connects to the Graph API Interface and adds a Device Configuration Profile
 .EXAMPLE
 Add-DeviceConfigurationPolicy -JSON $JSON
-Adds a device configuration policy in Intune
+Adds a Device Configuration Profile in Intune
 .NOTES
 NAME: Add-DeviceConfigurationPolicy
 #>
@@ -219,12 +219,12 @@ Function Add-DeviceConfigurationPolicyAssignment(){
 
 <#
 .SYNOPSIS
-This function is used to add a device configuration policy assignment using the Graph API REST interface
+This function is used to add a Device Configuration Profile assignment using the Graph API REST interface
 .DESCRIPTION
-The function connects to the Graph API Interface and adds a device configuration policy assignment
+The function connects to the Graph API Interface and adds a Device Configuration Profile assignment
 .EXAMPLE
 Add-DeviceConfigurationPolicyAssignment -ConfigurationPolicyId $ConfigurationPolicyId -TargetGroupId $TargetGroupId
-Adds a device configuration policy assignment in Intune
+Adds a Device Configuration Profile assignment in Intune
 .NOTES
 NAME: Add-DeviceConfigurationPolicyAssignment
 #>
@@ -606,11 +606,11 @@ If ($DuplicateDCP -eq $null)
     $JSON_Output = $JSON_Convert | ConvertTo-Json -Depth 5
             
     write-host
-    write-host "Device Configuration Policy '$DisplayName' Found..." -ForegroundColor Yellow
+    write-host "Device Configuration Profile '$DisplayName' Found..." -ForegroundColor Yellow
     write-host
     $JSON_Output
     write-host
-    Write-Host "Adding Device Configuration Policy '$DisplayName'" -ForegroundColor Yellow
+    Write-Host "Adding Device Configuration Profile '$DisplayName'" -ForegroundColor Yellow
 
     Add-DeviceConfigurationPolicy -JSON $JSON_Output
 

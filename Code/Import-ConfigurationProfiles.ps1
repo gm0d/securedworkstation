@@ -29,7 +29,7 @@ Get-ChildItem $ImportPath -filter *.json |
         
         If ($DuplicateDCP -eq $null) {
             $JSON_Output = $JSON_Convert | ConvertTo-Json -Depth 5                                    
-            Write-Host "Adding Device Configuration Policy '$DisplayName'" -ForegroundColor Green
+            Write-Host "`tAdding Device Configuration Profile '$DisplayName'" -ForegroundColor Green
             $DeviceConfig = New-MgDeviceManagementDeviceConfiguration -BodyParameter $JSON_Output            
             Write-Verbose "Device ConfigID [$($DeviceConfigID.id)]"            
             

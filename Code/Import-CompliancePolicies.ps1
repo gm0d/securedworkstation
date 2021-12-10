@@ -27,9 +27,9 @@ Foreach-object {
         
     If ($DuplicateDCP -eq $null) {                   
         $JSON_Output = $JSON_Convert | ConvertTo-Json -Depth 10            
-        Write-Host "Adding Device Configuration Policy [$DisplayName]" -ForegroundColor Green
+        Write-Host "`tAdding Device Compliance Policy [$DisplayName]" -ForegroundColor Green
         $DeviceCompliancePolicy = New-MgDeviceManagementDeviceCompliancePolicy -BodyParameter $JSON_Output                        
-        Write-Verbose "Device Configuration Policy ID [$($DeviceCompliancePolicy.Id)] created"
+        Write-Verbose "Device Compliance Policy ID [$($DeviceCompliancePolicy.Id)] created"
 
         #region Replace group assignments with actual values
         $JSON_Convert.assignments | 

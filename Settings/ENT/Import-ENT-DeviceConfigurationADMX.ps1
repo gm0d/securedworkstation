@@ -169,12 +169,12 @@ Function Create-GroupPolicyConfigurations()
 		
 <#
 .SYNOPSIS
-This function is used to add an device configuration policy using the Graph API REST interface
+This function is used to add an Device Configuration Profile using the Graph API REST interface
 .DESCRIPTION
-The function connects to the Graph API Interface and adds a device configuration policy
+The function connects to the Graph API Interface and adds a Device Configuration Profile
 .EXAMPLE
 Add-DeviceConfigurationPolicy -JSON $JSON
-Adds a device configuration policy in Intune
+Adds a Device Configuration Profile in Intune
 .NOTES
 NAME: Add-DeviceConfigurationPolicy
 #>
@@ -256,7 +256,7 @@ Function Create-GroupPolicyConfigurationsDefinitionValues()
 			if ($JSON -eq "" -or $JSON -eq $null)
 			{
 				
-				write-host "No JSON specified, please specify valid JSON for the Device Configuration Policy..." -f Red
+				write-host "No JSON specified, please specify valid JSON for the Device Configuration Profile..." -f Red
 				
 			}
 			
@@ -350,12 +350,12 @@ Function Add-GroupPolicyConfigurationPolicyAssignment(){
 
 <#
 .SYNOPSIS
-This function is used to add a device configuration policy assignment using the Graph API REST interface
+This function is used to add a Device Configuration Profile assignment using the Graph API REST interface
 .DESCRIPTION
-The function connects to the Graph API Interface and adds a device configuration policy assignment
+The function connects to the Graph API Interface and adds a Device Configuration Profile assignment
 .EXAMPLE
 Add-DeviceConfigurationPolicyAssignment -ConfigurationPolicyId $ConfigurationPolicyId -TargetGroupId $TargetGroupId
-Adds a device configuration policy assignment in Intune
+Adds a Device Configuration Profile assignment in Intune
 .NOTES
 NAME: Add-DeviceConfigurationPolicyAssignment
 #>
