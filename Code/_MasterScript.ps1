@@ -3,8 +3,8 @@
 
 [cmdletbinding()]
 param(        
-    [ValidateSet("PAW","ENT","SPE")]
-    $Configuration = "PAW"
+    [ValidateSet("SAW")] # At the moment the only supported configuration is SAW
+    $Configuration = "SAW"
 )
 
 # Determine script location for PowerShell
