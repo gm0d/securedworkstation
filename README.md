@@ -10,7 +10,6 @@ This repository contains the accompanying scripts to deploy some of the artifact
 
 Before running the deployment script the latest version of the following modules need to be installed in the system:
 
-- AzureAD
 - WindowsAutopilotIntune
 - Microsoft.Graph
 
