@@ -39,7 +39,19 @@
     "tpmRequired": true,
     "deviceCompliancePolicyScript": null,
     "validOperatingSystemBuildRanges": [],
-    "assignments": [],
+    "assignments": [
+        {
+            "id": "00000000-0000-0000-0000-000000000000_00000000-0000-0000-0000-000000000000",
+            "source": "direct",
+            "sourceId": "00000000-0000-0000-0000-000000000000",
+            "target": {
+                "@odata.type": "#microsoft.graph.groupAssignmentTarget",
+                "deviceAndAppManagementAssignmentFilterId": null,
+                "deviceAndAppManagementAssignmentFilterType": "none",
+                "groupId": "SAW-Devices-UserDriven"
+            }
+        }
+    ],
     "scheduledActionsForRule": [
         {
             "id": "070e9f28-9bf1-41cc-b5bb-77229343d3b9",

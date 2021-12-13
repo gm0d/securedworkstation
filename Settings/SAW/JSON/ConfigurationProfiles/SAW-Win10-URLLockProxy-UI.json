@@ -373,17 +373,6 @@
                 "deviceAndAppManagementAssignmentFilterType": "none",
                 "groupId": "SAW-Devices-UserDriven"
             }
-        },
-        {
-            "id": "00000000-0000-0000-0000-000000000000_00000000-0000-0000-0000-000000000000",
-            "source": "direct",
-            "sourceId": "00000000-0000-0000-0000-000000000000",
-            "target": {
-                "@odata.type": "#microsoft.graph.groupAssignmentTarget",
-                "deviceAndAppManagementAssignmentFilterId": null,
-                "deviceAndAppManagementAssignmentFilterType": "none",
-                "groupId": "SAW-Devices-SelfDeploying"
-            }
         }
     ]
 }

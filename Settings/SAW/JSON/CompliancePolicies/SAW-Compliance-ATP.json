@@ -1,11 +1,11 @@
 {
     "@odata.type": "#microsoft.graph.windows10CompliancePolicy",
     "roleScopeTagIds": [],
-    "id": "56454fb5-78ae-4489-a4de-c60aeeb4bb8b",
-    "createdDateTime": "2020-11-30T15:27:53.2888215Z",
-    "description": "Intune compliance settings to apply immediately\n",
-    "lastModifiedDateTime": "2020-11-30T15:27:53.2888215Z",
-    "displayName": "SAW-Compliance-Immediate",
+    "id": "a8994b69-5205-4614-ae3e-150c2d4f2c5d",
+    "createdDateTime": "2020-11-30T15:27:50.8972649Z",
+    "description": "Defender ATP-specific compliance settings to apply after 24 hours\n",
+    "lastModifiedDateTime": "2020-11-30T15:27:50.8972649Z",
+    "displayName": "SAW-Compliance-ATP",
     "version": 1,
     "passwordRequired": false,
     "passwordBlockSimple": false,
@@ -27,14 +27,14 @@
     "codeIntegrityEnabled": false,
     "storageRequireEncryption": false,
     "activeFirewallRequired": false,
-    "defenderEnabled": true,
+    "defenderEnabled": false,
     "defenderVersion": null,
     "signatureOutOfDate": false,
-    "rtpEnabled": true,
-    "antivirusRequired": true,
+    "rtpEnabled": false,
+    "antivirusRequired": false,
     "antiSpywareRequired": false,
-    "deviceThreatProtectionEnabled": false,
-    "deviceThreatProtectionRequiredSecurityLevel": "unavailable",
+    "deviceThreatProtectionEnabled": true,
+    "deviceThreatProtectionRequiredSecurityLevel": "secured",
     "configurationManagerComplianceRequired": false,
     "tpmRequired": false,
     "deviceCompliancePolicyScript": null,
@@ -50,28 +50,17 @@
                 "deviceAndAppManagementAssignmentFilterType": "none",
                 "groupId": "SAW-Devices-UserDriven"
             }
-        },
-        {
-            "id": "00000000-0000-0000-0000-000000000000_00000000-0000-0000-0000-000000000000",
-            "source": "direct",
-            "sourceId": "00000000-0000-0000-0000-000000000000",
-            "target": {
-                "@odata.type": "#microsoft.graph.groupAssignmentTarget",
-                "deviceAndAppManagementAssignmentFilterId": null,
-                "deviceAndAppManagementAssignmentFilterType": "none",
-                "groupId": "SAW-Devices-SelfDeploying"
-            }
         }
     ],
     "scheduledActionsForRule": [
         {
-            "id": "56454fb5-78ae-4489-a4de-c60aeeb4bb8b",
+            "id": "a8994b69-5205-4614-ae3e-150c2d4f2c5d",
             "ruleName": null,
-            "scheduledActionConfigurations@odata.context": "https://graph.microsoft.com/beta/$metadata#deviceManagement/deviceCompliancePolicies(\u002756454fb5-78ae-4489-a4de-c60aeeb4bb8b\u0027)/microsoft.graph.windows10CompliancePolicy/microsoft.graph.windows10CompliancePolicy/microsoft.graph.windows10CompliancePolicy/microsoft.graph.windows10CompliancePolicy/scheduledActionsForRule(\u002756454fb5-78ae-4489-a4de-c60aeeb4bb8b\u0027)/scheduledActionConfigurations",
+            "scheduledActionConfigurations@odata.context": "https://graph.microsoft.com/beta/$metadata#deviceManagement/deviceCompliancePolicies(\u0027a8994b69-5205-4614-ae3e-150c2d4f2c5d\u0027)/microsoft.graph.windows10CompliancePolicy/microsoft.graph.windows10CompliancePolicy/microsoft.graph.windows10CompliancePolicy/microsoft.graph.windows10CompliancePolicy/microsoft.graph.windows10CompliancePolicy/microsoft.graph.windows10CompliancePolicy/scheduledActionsForRule(\u0027a8994b69-5205-4614-ae3e-150c2d4f2c5d\u0027)/scheduledActionConfigurations",
             "scheduledActionConfigurations": [
                 {
-                    "id": "59ae4e45-6495-4d33-b943-1bb01554bc6f",
-                    "gracePeriodHours": 0,
+                    "id": "44bd1593-f79a-4a98-8acf-f20b496c621d",
+                    "gracePeriodHours": 24,
                     "actionType": "block",
                     "notificationTemplateId": "00000000-0000-0000-0000-000000000000",
                     "notificationMessageCCList": []

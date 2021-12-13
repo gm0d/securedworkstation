@@ -18,12 +18,6 @@
                 "@odata.type": "#microsoft.graph.groupAssignmentTarget",
                 "groupId": "SAW-Devices-UserDriven"
             }
-        },
-        {
-            "target": {
-                "@odata.type": "#microsoft.graph.groupAssignmentTarget",
-                "groupId": "SAW-Devices-SelfDeploying"
-            }
         }
     ]
 }

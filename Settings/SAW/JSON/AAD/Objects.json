@@ -1,17 +1,5 @@
 {
-    "Groups": [
-        {
-            "displayName": "SAW-Devices-SelfDeploying",
-            "description": "Dynamic Group for Autopilot for SelfDeploying SAW Devices",
-            "groupTypes": [
-                "DynamicMembership"
-            ],
-            "mailEnabled": false,
-            "mailNickName": "group",
-            "securityEnabled": true,
-            "membershipRuleProcessingState": "on",
-            "membershipRule": "(device.devicePhysicalIds -any (_ -eq \"[OrderID]:SAW-SelfDeploying\"))"
-        },
+    "Groups": [        
         {
             "displayName": "SAW-Devices-UserDriven",
             "description": "Dynamic Group for Autopilot User driven deployment for  SAW Devices",
