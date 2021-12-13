@@ -53,19 +53,3 @@ Start-Sleep -s 5
 # Write-Host "Adding PS1 Config scripts"
 # . $ScriptDir/Import-DeviceConfigScript.ps1 -ImportPath "$ConfigPath\JSON\DeviceManagementScripts"
 # Start-Sleep -s 5
-
-#write-host "Adding Device Enrollment Restrictions"
-#. $ScriptDir/DER-Import_PAW.ps1
-#Start-Sleep -s 5
-
-# Write-Host "Creating Scope tag"
-# Connect-MgGraph -AccessToken $(Get-AuthToken -User $User)
-# (Get-Content "$ConfigPath\..\Tenant\Settings.json" | ConvertFrom-Json).roleScopeTags | ForEach-Object {
-    
-#     if (Get-MgDeviceManagementRoleScopeTag -Filter "displayname eq '$PSItem'" ){
-#         Write-Warning "Role scope tag [$PSItem] already exist"
-#     }
-#     else{
-#         New-MgDeviceManagementRoleScopeTag -DisplayName 'Privileged-Identity' -Description 'Tag for privileged identities'
-#     }
-# }
