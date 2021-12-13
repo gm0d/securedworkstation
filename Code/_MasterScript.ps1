@@ -18,30 +18,31 @@ Select-MgProfile -Name "beta"
 ####################################################        
 Write-Host "Authenticating to Azure AD - Check authentication window" -ForegroundColor DarkGreen
 $User = (Connect-AzureAD).Account.Id  
+Write-Host "Authenticating to MS Graph - Check authentication window" -ForegroundColor DarkGreen
 Connect-MsGraph | Out-Null
 ####################################################    
 
 # Get Auth token for Azure AD app id
-Write-Host "Adding required AAD Groups"
+Write-Host "AAD Groups"
 Connect-MgGraph -AccessToken $(Get-AuthToken -User $User -ClientId '1b730954-1685-4b74-9bfd-dac224a7b894') | Out-Null # client ID of AzureAD app 
 . $ScriptDir/Import-AADObjects.ps1 -SettingsFile "$ConfigPath\JSON\AAD\Objects.json"
-Start-Sleep -s 5
+Start-Sleep -s 20
 
 Connect-MgGraph -AccessToken $(Get-AuthToken -User $User) | Out-Null
-Write-Host "Adding Device Compliance Policies"
+Write-Host "Device Compliance Policies"
 . $ScriptDir/Import-CompliancePolicies.ps1 -ImportPath "$ConfigPath\JSON\CompliancePolicies"
 Start-Sleep -s 5
 
-Write-Host "Adding Device Configuration Profiles"
+Write-Host "Device Configuration Profiles"
 . $ScriptDir/Import-ConfigurationProfiles.ps1 -ImportPath "$ConfigPath\JSON\ConfigurationProfiles"
 Start-Sleep -s 5
 
 # MsGraph stuff
-write-host "Adding Enrollment Status Page"
+write-host "Enrollment Status Page"
 . $ScriptDir/Import-EnrollmentStatusPage.ps1 -ImportPath "$ConfigPath\JSON\EnrollmentStatusPage"
 Start-Sleep -s 5
 
-write-host "Adding AutoPilot Profile"
+write-host "AutoPilot Profiles"
 . $ScriptDir/Import-DeploymentProfiles.ps1 -ImportPath "$ConfigPath\JSON\DeploymentProfiles"
 Start-Sleep -s 5
 

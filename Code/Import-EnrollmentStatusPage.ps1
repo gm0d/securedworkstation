@@ -19,7 +19,7 @@ Get-ChildItem $ImportPath -filter *.json |
         $ESPage = Get-EnrollmentStatusPage | Where-Object displayName -eq $JSON_Convert.displayName
         
         If ($ESPage -eq $null) {                        
-            Write-Host "Adding Enrollment status page [$($JSON_Convert.displayName)]" -ForegroundColor Green
+            Write-Host "`tAdding Enrollment status page [$($JSON_Convert.displayName)]" -ForegroundColor Green
             $Properties = @{
                 DisplayName = $JSON_Convert.displayName
                 Description =$JSON_Convert.description

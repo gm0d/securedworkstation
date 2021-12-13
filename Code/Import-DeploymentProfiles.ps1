@@ -19,18 +19,18 @@ Get-ChildItem $ImportPath -filter *.json |
         $AutopilotProfile = Get-AutopilotProfile | Where-Object displayName -eq $JSON_Convert.settings.displayName
         
         If ($AutopilotProfile -eq $null) {            
-            Write-Host "Adding Autopilot profile [$($JSON_Convert.Settings.displayName)]" -ForegroundColor Green
+            Write-Host "`tAdding Autopilot profile [$($JSON_Convert.Settings.displayName)]" -ForegroundColor Green
             $Properties = Convert-ObjectToHashTable $JSON_Convert.Settings 
-            $Profile = New-AutopilotProfile @Properties 
+            $autopilotProfile = New-AutopilotProfile @Properties 
 
-            Write-Verbose "Profile created with ID [$($Profile.Id)]"
+            Write-Verbose "Profile created with ID [$($autopilotProfile.Id)]"
 
             Write-Verbose "Creating assignments for profile"
             $JSON_Convert.assignments | 
                 ForEach-Object {
                     $TargetGroupId = (Get-MgGroup -Filter "displayName eq '$PSItem'").id
                     if ($TargetGroupID){
-                        Set-AutopilotProfileAssignedGroup -id $Profile.id -groupid $TargetGroupId | Out-Null
+                        Set-AutopilotProfileAssignedGroup -id $autopilotProfile.id -groupid $TargetGroupId | Out-Null
                 }
             }
         }        
