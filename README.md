@@ -85,3 +85,22 @@ The _masterScript.ps1 file calls the following scripts to import the artifacts
 [**Import-SAW-DeviceConfigurationADMX.ps1**](.\Settings\SAW\JSON\DeviceConfigurationADMX/SAW-Edge%20Version%2085%20-%20Computer.json) this script is used to import the Device Configuration ADMX Template profile that configures Microsoft Edge security settings.
 
 1.  [SAW-Edge Version 85 - Computer](.\Settings\SAW\JSON\DeviceConfigurationADMX/SAW-Edge%20Version%2085%20-%20Computer.json) applies administrative policies that control features in Microsoft Edge version 77 and later, refer to [Microsoft Edge - Policies](https://docs.microsoft.com/en-us/DeployEdge/microsoft-edge-policies) or more details of the settings applied using the profile.
+
+# Updating settings
+
+## AppLocker
+The [app locker configuration profile](.\Settings\SAW\JSON\ConfigurationProfiles\SAW-Win10-AppLocker-Custom-CSP.json) has the settings base64 encoded, they can be customized as a one time task directly in the portal after deployment. Additionally XML files with the raw settings have been provided, if settings are modified in the XML files, they will need to be base64 encoded and merged in to the JSON file. A build script has been provided to complete this task.
+
+From the base directory run
+
+```powershell
+Invoke-Build
+``` 
+
+## Other settings
+Similarly to AppLocker, settings for Configuration profiles, compliance policies, Enrollment status page and Autopilot profiles can be modified in the portal after deployment or directly in the JSON files before deployment. For one time changes (specific for a customer) is recommended to do after deployment, and for persistant changes (for all customers) it's recommended to do in the JSON files. These changes should be peer reviewed before commiting them to the main branch.
+
+The following links provide details on the settings available to be configured
+
+[Compliance Policies](https://docs.microsoft.com/en-us/mem/intune/protect/device-compliance-get-started)
+[Configuration Profiles](https://docs.microsoft.com/en-us/mem/intune/configuration/custom-settings-windows-10)
