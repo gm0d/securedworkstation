@@ -133,7 +133,7 @@
     "defenderCloudBlockLevel": "notConfigured",
     "defenderCloudExtendedTimeout": null,
     "defenderCloudExtendedTimeoutInSeconds": null,
-    "defenderPromptForSampleSubmission": "userDefined",
+    "defenderPromptForSampleSubmission": "sendAllDataWithoutPrompting",
     "defenderScheduledQuickScanTime": null,
     "defenderScanType": "userDefined",
     "defenderSystemScanSchedule": "userDefined",

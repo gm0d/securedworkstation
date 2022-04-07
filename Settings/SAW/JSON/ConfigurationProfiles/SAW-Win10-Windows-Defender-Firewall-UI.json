@@ -124,7 +124,7 @@
     "defenderGuardMyFoldersType": "userDefined",
     "defenderGuardedFoldersAllowedAppPaths": [],
     "defenderAdditionalGuardedFolders": [],
-    "defenderNetworkProtectionType": "userDefined",
+    "defenderNetworkProtectionType": "enable",
     "defenderExploitProtectionXml": null,
     "defenderExploitProtectionXmlFileName": null,
     "defenderSecurityCenterBlockExploitProtectionOverride": false,

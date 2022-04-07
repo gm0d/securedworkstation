@@ -34,7 +34,7 @@ Get-ChildItem $ImportPath -filter *.json |
             $ESP = Add-EnrollmentStatusPage @Properties 
             Write-Verbose "ESP created with ID [$($ESP.Id)]"
 
-            # cmdlet is hitting the incorrect endpoint and creates a wron structure, it can be done via api with
+            # cmdlet is hitting the incorrect endpoint and creates a wrong structure, it can be done via api with
             # POST /v1.0/deviceManagement/deviceEnrollmentConfigurations/6af31291-8af3-496a-a685-1630124a8acd_Windows10EnrollmentCompletionPageConfiguration/assign HTTP/1.1
             # {
             #     "enrollmentConfigurationAssignments": [

@@ -2,7 +2,7 @@
     "Groups": [        
         {
             "displayName": "SAW-Devices-UserDriven",
-            "description": "Dynamic Group for Autopilot User driven deployment for  SAW Devices",
+            "description": "Dynamic Group for Autopilot User driven deployment for SAW Devices",
             "groupTypes": [
                 "DynamicMembership"
             ],

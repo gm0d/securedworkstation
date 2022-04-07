@@ -17,13 +17,18 @@ Select-MgProfile -Name "beta"
     
 ####################################################        
 Write-Host "Authenticating to MS Graph - Check authentication window" -ForegroundColor DarkGreen
-Connect-MsGraph | Out-Null
-$scopes = @('Group.ReadWrite.All'
-    'Directory.ReadWrite.All'
-    'Directory.AccessAsUser.All'
-    'DeviceManagementConfiguration.ReadWrite.All'
-    'DeviceManagementConfiguration.Read.All')
-Connect-MgGraph -Scopes $scopes
+Connect-MsGraph -ForceInteractive | Out-Null
+$scopes = @(
+    'User.Read'
+    'openid'
+    'profile'
+    'offline_access'
+    'Group.ReadWrite.All'
+    # 'Directory.ReadWrite.All'
+    # 'Directory.AccessAsUser.All'
+    'DeviceManagementConfiguration.ReadWrite.All'  
+)  
+Connect-MgGraph -Scopes $scopes -ForceRefresh
 ####################################################    
 
 # Get Auth token for Azure AD app id
